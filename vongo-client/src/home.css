@@ -1,0 +1,229 @@
+.home-image {
+  display: flex;
+  background-image: url(./photos/river-delta.jpg);
+  background-size: cover;
+  background-position: center;
+  height: 700px;
+  text-align: center;
+  justify-content: center;
+  color: rgb(243, 239, 235);
+  font-size: 1rem;
+  width: 100%;
+  font-family: sans-serif;
+  text-shadow: 3px 3px 40px #000000;
+}
+
+.home-image-text {
+  font-size: calc(4vw + 1em);
+}
+p {
+  font-size: 1.2rem;
+}
+body::-webkit-scrollbar {
+  display: none;
+}
+body {
+  font-family: sans-serif;
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 16px;
+}
+
+.body1 {
+  margin: 1rem;
+}
+
+.tech-spec-lists {
+  font-size: 2rem;
+  font-family: sans-serif;
+  font-weight: 350;
+}
+
+.about-vongo {
+  padding-top: 3rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 0;
+  background-color: #ced7d9;
+  font-size: 1rem;
+  text-align: center;
+  height: 800px;
+}
+.main-text-header {
+  font-family: sans-serif;
+}
+.main-text {
+  font-size: 1rem;
+  font-family: sans-serif;
+  font-weight: 300;
+  line-height: 30px
+}
+.shop-now-button{
+  padding-top: 3rem;
+  display: absolute;
+  
+}
+.button-shop {
+  border-bottom-color: rgb(255, 138, 61);
+  border-bottom-style: solid;
+  height: 30px;
+}
+.button-shop:hover {
+  border-bottom-color:  rgb(0, 43, 77);
+}
+
+
+
+@media screen and (min-width: 480px) {
+  .body1 {
+    margin: 8rem;
+  }
+  .about-vongo {
+    padding: 8rem;
+    font-size: 2rem;
+  }
+
+  .firstImage {
+    width: 400px;
+  }
+}
+.tech-spec-div {
+  z-index: -100;
+}
+
+.spacer {
+  height: 200px;
+  display: block
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.firstImageDiv {
+  display: flex;
+  justify-content: center;
+}
+
+.firstImage {
+  background-color: rgb(243, 239, 235);
+  height: 100%;
+  z-index: 2;
+}
+.tech-specs {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  z-index: -1;
+}
+
+.specs {
+  font-size: clamp(2rem, 2.5rem, 4rem);
+  margin-top: 2rem;
+  animation: fadeInUp;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+  font-weight: 500;
+}
+
+.spacer1 {
+  height: 150px;
+}
+.spacer2 {
+  height: 80px;
+}
+.grid6 {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+@keyframes imageAnimate {
+  0% {
+    opacity: 0;
+    transform: translateX(-1000px);
+  }
+  80% {
+    transform: translateX(-50);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.grid-specs {
+  padding: 1rem;
+  padding-right:1rem;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: auto auto;
+}
+
+.grid-specs > * {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.grid3 {
+  display: flex;
+}
+
+.grid8 {
+  grid-column: span 2;
+}
+
+@media screen and (min-width: 480px) {
+  .grid-specs {
+    grid-template-columns: auto auto auto;
+    gap: 1.5rem;
+  }
+  .grid7 {
+    grid-column: span 3;
+  }
+  .grid5 {
+    grid-column: span 2;
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(400px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    transform: translateX(-400px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    transform: translateX(400px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

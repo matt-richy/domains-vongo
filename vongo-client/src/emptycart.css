@@ -1,0 +1,9 @@
+.empty-cart {
+  margin-top: 4rem;
+  display: flex;
+  font-size: 2rem;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  grid-column: span 2;
+}
