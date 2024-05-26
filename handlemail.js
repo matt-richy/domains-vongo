@@ -7,11 +7,11 @@ require('dotenv').config();
 sgMail.setApiKey(process.env.SEND_GRID);
 
 
-router.post('/sendemail/receipt', (req, res) => {
+router.post('/api/sendemail/receipt', (req, res) => {
     const data = req.body;
     const email= data.email;
     console.log("this is from req", data);
-    const cartArray = data.cartUser;
+    const cartArray = data.cart;
     console.log("cart array", cartArray);
     const capacity= cartArray[0].capacity;
     const colour=cartArray[0].colour;

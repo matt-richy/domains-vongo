@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import "./popUp.css";
 import bag from "./photos/bag.png";
 import close from "./photos/close.png";
@@ -36,6 +35,7 @@ const Popup = ({ onClosePopup, ...props }) => {
           <li>Size: {props.bottlecap}</li>
           <li>Price: R{props.price}</li>
           <li>Colour: {props.colour}</li>
+          <li>QTY: {props.qty}</li>
         </ul>
         <Link to="/Cart">
           <img className="cart-icon" src={bag} />

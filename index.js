@@ -1,15 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const keys = require("./config/keys");
 const cookieParser = require("cookie-parser");
-
 //const userIdMiddleware = require("./services/uuid");
 const axios = require("axios");
 const cors = require("cors");
 require("./models/user");
 require("./models/cart");
 require("./models/usercart");
+require("./models/newsletter.js")
 const handlemail = require("./handlemail.js");
+const { generatePayFastRedirectUrl, verifySignature } = require('./payfast');
 
 
 
@@ -19,60 +19,77 @@ app.use(cookieParser());
 app.use(express.json()); // Middleware to parse JSON bodies
 mongoose.connect(process.env.DB_URL);
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: 'GET, POST',
-    allowedHeaders: 'Content-Type,Authorization'
-  })
-);
+app.use(cors());
+app.use(handlemail);
 
-app.get("/", (req, res) => {
-  const userId = req.userId;
-  res.send({ userId });
-});
+
+app.use(express.static("vongo-client/build"));
 
 
 
-app.post("/api/test", (req, res) => {
-  const data = req.body;
-  console.log(data);
-  res.status("success");
+app.post('/api/test', (req, res) => {
+  const { message } = req.body;
+  console.log('Received message:', message);
+  res.status(200).json({ success: true, message: 'Message received' });
 });
 
 
 //email logic 
+
+
 app.post("/api/sendemail/receipt", handlemail);
 
 
-//handles the redirect to payment screen.
-app.post('/api/payment', async (req, res) => {
+//below code hanldes the payment using payfast API 
+app.post('/api/payfast', (req, res) => {
+  const { amount, name, email } = req.body;
+
   try {
-    // Replace 'YOUR_SECRET_KEY' with your actual Yoco secret key
-    const secretKey = process.env.YOCO_KEY;
-
-    // Construct the request body with the required parameters
-    const requestBody = req.body;
-
-    // Make the POST request to create a checkout
-    const response = await axios.post('https://payments.yoco.com/api/checkouts', requestBody, {
-      headers: {
-        'Authorization': `Bearer ${secretKey}`,
-        'Idempotency-Key': 'unique-idempotency-key' // Optional, used for idempotency
-      }
-    });
-
-    // Return the checkout data to the frontend
-    res.json({ success: true, data: response.data });
+      const redirectUrl = generatePayFastRedirectUrl({ amount, name, email });
+      res.json({ redirectUrl });
   } catch (error) {
-    console.error('Error creating checkout:', error.response.data);
-    // Return an error response to the frontend
-    res.status(500).json({ success: false, error: 'Failed to create checkout' });
+      console.error('Error generating PayFast redirect URL:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-//verifies the payment made 
+app.post('/api/notify', (req, res) => {
+  const data = req.body;
 
+  try {
+      if (verifySignature(data, 'your-passphrase')) {
+          // Update order status in your database
+          res.sendStatus(200);
+      } else {
+          res.status(400).json({ error: 'Invalid signature' });
+      }
+  } catch (error) {
+      console.error('Error verifying PayFast signature:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+app.post("/api/subscribe", async(req, res) => {
+  const data = req.body
+  const email = data.email; 
+  try {
+  const newSubscriber = mongoose.model("Newsletter");
+  new newSubscriber({
+    email: email,
+  }).save()
+  console.log("Added to Mailing list ")
+  return res.status(200).json({ message: 'Subscription successful' });
+  }
+  catch (err) {
+    if (err.code === 11000) { // Duplicate email error
+        return res.status(400).json({ error: 'Email is already subscribed' });
+    }
+    console.error('Error adding subscriber:', err);
+    return res.status(500).json({ error: 'Subscription failed' });
+}
+  
+})
 
 
 
@@ -85,21 +102,21 @@ app.post("/api/add", (req, res) => {
     colour: cartArray[0].colour,
     quantity: cartArray[0].quantity,
   }).save();
+  console.log("success in saving user order")
 });
-app.post("/api/addUser", (req, res) => {
-  const data = req.body;
-  const Usercart = mongoose.model("Usercart");
 
-  console.log(data.cartUser);
-  new Usercart({
-    name: data.name,
-    email: data.email,
-    number: data.number,
-    address: data.address,
-    city: data.city,
-    zip: data.zip,
-    userCart: data.cartUser,
-  }).save();
+
+//below code adds the customers information along with their cart to mongoDB, in later code this would only add once paid
+const Usercart = mongoose.model("Usercart");
+app.post('/api/addUser', async (req, res) => {
+  try {
+    const newUser = new Usercart(req.body);
+    const savedUser = await newUser.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    console.error('Error saving user:', error);
+    res.status(500).json({ message: 'Internal Server Error', error });
+  }
 });
 
 //below code sends an email
@@ -116,10 +133,13 @@ if (process.env.NODE_ENV === "production") {
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "vongo-client", "build", "index.html"));
   });
+  app.get("/", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "vongo-client", "build", "index.html"));
+  });
 }
 
 const PORT = process.env.PORT || 4000;
 
 
-console.log(PORT);
+console.log("running on port", PORT);
 app.listen(PORT);

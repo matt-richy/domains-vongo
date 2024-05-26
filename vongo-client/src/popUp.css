@@ -22,9 +22,9 @@ body {
 
 .pop-up {
   position: fixed;
-  width: 300px;
-  height: 300px;
-  background-color: #5a6857; /* Background color of the popup box */
+  width: 330px;
+  height: 400px;
+  background-color: #00334C; /* Background color of the popup box */
   border-radius: 10px; /* Optional: Add rounded corners */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: Add shadow for depth */
   padding: 20px; /* Optional: Add padding for content */

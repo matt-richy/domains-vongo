@@ -69,6 +69,7 @@ html {
   border-bottom-color: rgb(255, 138, 61);
   border-bottom-style: solid;
   height: 30px;
+  font-size: 1.6rem;
 }
 .button-shop:hover {
   border-bottom-color:  rgb(0, 43, 77);

@@ -4,14 +4,13 @@ import image1 from "./photos/iceflow.png";
 import ScrollAnimation from "react-animate-on-scroll";
 import "animate.css/animate.min.css";
 import { Link } from "react-router-dom";
+import Footer from "./footer";
 
 const Homepage = () => {
   return (
     <>
       <div className="home-image" id="sticky-parallax-header">
-        <ScrollAnimation animateIn="animate__zoomIn">
-          <h1 className="home-image-text">VONGO</h1>
-        </ScrollAnimation>
+        
       </div>
       <div className="spacer"></div>
       <div className="body1">
@@ -57,8 +56,8 @@ const Homepage = () => {
           
       </div>
 
-      <div className="spacer1"></div>
-      
+
+      <Footer />
       <div className="spacer"></div>
     </>
   );

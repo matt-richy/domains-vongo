@@ -9,6 +9,7 @@ import axios from "axios";
 import { motion, } from "framer-motion";
 import Popup from "./addCartpop";
 import { Imageswiper } from "./Imageswipe.tsx";
+import Footer from "./footer";
 
 const bottles = [
   {
@@ -44,7 +45,6 @@ const bottles = [
 
 export default function Buy() {
 
-  const axiosInstance = axios.create({baseURL: process.env.REACT_APP_API_URL, })
  
   const { cartItems, addToCart } = useCart();
   const [togglePopup, setPopup] = useState(false);
@@ -60,31 +60,21 @@ export default function Buy() {
       quantity: useQuant,
     });
     togglePop();
+    axios.post('/api/test', { message: "test" })
+            .then((res) => {
+                console.log("sucesss")
+            })
+            .catch((error) => {
+                console.error('Error posting data:', error);
+               
+            });
   };
   const togglePop = () => {
     setPopup(!togglePopup);
   };
 
-  const sendCartToBackend = () => {
-    console.log(cartItems);
 
-    const cartForDb = cartItems.map(({ price, colour, quantity }) => ({
-      price,
-      colour,
-      quantity,
-    }));
-    console.log(cartForDb);
-    axiosInstance
-      .post("/api/add", cartForDb)
-      .then((response) => {
-        console.log("FUck yes");
-      })
-      .catch((error) => {
-        console.error("error adding cart to backend", error);
-      });
-  };
 
- 
 
   const [useQuant, setQuant] = useState(1);
 
@@ -184,9 +174,7 @@ export default function Buy() {
             <Imageswiper size={bottleSize} colour={bottleColour} />
           </div>
           <div>
-            <div className="price-div">
-              <h3 className="price">R{items.srcs[bottleSize].price} </h3>
-            </div>
+            
             <div className="medium-large-div">
               <button
                 className={
@@ -257,14 +245,16 @@ export default function Buy() {
               <div className="total-price">
                 <p1>TOTAL : R{useQuant * items.srcs[bottleSize].price}</p1>
               </div>
-            </div>
-            <div className="snowflake">
+              <div className="snowflake">
               <h1>&#10052;</h1>
 
               <h3> 12 Hrs</h3>
               <h1>&#9832;</h1>
               <h3> 8 Hrs</h3>
+              </div>
+
             </div>
+           
             <div className="add-cart-div">
               <motion.button
                 className="add-to-cart"
@@ -280,18 +270,18 @@ export default function Buy() {
                   bottlecap={items.srcs[bottleSize].capacity}
                   price={items.srcs[bottleSize].price}
                   colour={bottleColour}
+                  qty = {useQuant}
                 />
               ) : (
                 ""
               )}
 
-              <button className="add-to-cart" onClick={sendCartToBackend}>
-                Send backend
-              </button>
+              
             </div>
           </div>
         </div>
       ))}
+      <Footer />
     </div>
   );
 }

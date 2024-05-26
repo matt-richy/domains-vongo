@@ -90,7 +90,7 @@ export const Imageswiper: React.FC<ImageSwiperProps> = (props) => {
         position: "relative",
         display: "flex",
         justifyContent: "center",
-        height: "50vh",
+        height: "75vh",
         width: "100%",
         top: "1rem",
       }}
