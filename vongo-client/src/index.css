@@ -2,6 +2,10 @@ body {
   font-family: sans-serif;
   background-color: rgb(243, 239, 235);
   margin: 0;
+  overflow-x: hidden;
+}
+html {
+  overflow-x: hidden;
 }
 
 .images {
@@ -142,6 +146,10 @@ img {
   color: #fff;
 }
 
+.spacer-below-swiper {
+  height: 50px;
+}
+
 .add-to-cart {
   background-color: #00334C;
   color: #fff;
@@ -165,6 +173,10 @@ img {
   -webkit-user-select: none;
   touch-action: manipulation;
 }
+.add-to-cart:hover {
+  color: rgb(255, 138, 61);
+}
+
 .next,
 .prev {
   top: calc(50% - 20px);

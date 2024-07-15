@@ -174,7 +174,7 @@ export default function Buy() {
             <Imageswiper size={bottleSize} colour={bottleColour} />
           </div>
           <div>
-            
+            <div className="spacer-below-swiper"> </div>
             <div className="medium-large-div">
               <button
                 className={
@@ -256,14 +256,13 @@ export default function Buy() {
             </div>
            
             <div className="add-cart-div">
-              <motion.button
+              <button
                 className="add-to-cart"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+               
                 onClick={handleAddToCart}
               >
                 ADD TO CART
-              </motion.button>
+              </button>
               {togglePopup ? (
                 <Popup
                   onClosePopup={togglePop}

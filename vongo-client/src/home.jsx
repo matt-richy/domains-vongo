@@ -9,29 +9,13 @@ import Footer from "./footer";
 const Homepage = () => {
   return (
     <>
-      <div className="home-image" id="sticky-parallax-header">
-        
+      <div>
+         <h1 className="main-heading">NEVER GO THIRSTY AGAIN.</h1>
+      <h1 className="sub-heading">  The <strong>Ultimate</strong> Insulated Flask</h1>
       </div>
-      <div className="spacer"></div>
-      <div className="body1">
-        <ScrollAnimation animateIn="animate__fadeInLeft" animateOnce>
-          <div className="firstImageDiv">
-            <img src={image1} className="firstImage" />
-          </div>
-        </ScrollAnimation>
 
-        <div className="tech-spec-div">
-          <div className="tech-specs">
-            <ul className="tech-spec-lists">
-              <li className = "tech-specs-list">1.9l - 3.8l </li>
-              <li className = "tech-specs-list">double wall insulation </li>
-              <li className = "tech-specs-list"> .304 grade s/s </li>
-            </ul>
-            
-          </div>
-        </div>
-      </div>
-      <div className="spacer2"></div>
+      <div className="spacer"></div>
+      
       <div className="about-vongo">
         <h1 className="main-text-header">Journey of Vongo</h1>
         <p className= "main-text">
@@ -55,6 +39,27 @@ const Homepage = () => {
           </Link></div>
           
       </div>
+    
+      <div className="body1">
+        <ScrollAnimation animateIn="animate__fadeInLeft" animateOnce>
+          <div className="firstImageDiv">
+            <img src={image1} className="firstImage" />
+          </div>
+        </ScrollAnimation>
+
+        <div className="tech-spec-div">
+          <div className="tech-specs">
+            <ul className="tech-spec-lists">
+              <li className = "tech-specs-list">1.9l - 3.8l </li>
+              <li className = "tech-specs-list">double wall insulation </li>
+              <li className = "tech-specs-list"> .304 grade s/s </li>
+            </ul>
+            
+          </div>
+        </div>
+      </div>
+      <div className="spacer2"></div>
+      
 
 
       <Footer />

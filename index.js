@@ -41,15 +41,18 @@ app.post("/api/sendemail/receipt", handlemail);
 
 
 //below code hanldes the payment using payfast API 
-app.post('/api/payfast', (req, res) => {
-  const { amount, name, email } = req.body;
+
+
+app.post("/api/payfast", (req, res) => {
+  const { amount, name, email, number, address, city, zipCode } = req.body;
+ 
 
   try {
-      const redirectUrl = generatePayFastRedirectUrl({ amount, name, email });
-      res.json({ redirectUrl });
+    const redirectUrl = generatePayFastRedirectUrl({ amount, name, email });
+    res.json({ redirectUrl });
   } catch (error) {
-      console.error('Error generating PayFast redirect URL:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error generating PayFast redirect URL:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -57,15 +60,15 @@ app.post('/api/notify', (req, res) => {
   const data = req.body;
 
   try {
-      if (verifySignature(data, 'your-passphrase')) {
-          // Update order status in your database
-          res.sendStatus(200);
-      } else {
-          res.status(400).json({ error: 'Invalid signature' });
-      }
+    if (verifySignature(data, payfast.passphrase)) {
+      // Update order status in your database
+      res.sendStatus(200);
+    } else {
+      res.status(400).json({ error: 'Invalid signature' });
+    }
   } catch (error) {
-      console.error('Error verifying PayFast signature:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error verifying PayFast signature:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

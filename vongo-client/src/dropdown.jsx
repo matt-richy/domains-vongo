@@ -26,7 +26,7 @@ const Sidebar = ({ onCloseSideBar }) => {
   };
   return (
     <div className="sidebar" ref={sidebarRef}>
-      <motion.ul
+      <ul
         className="sidebars"
         initial={{ x: "-100%" }}
         animate={{ x: 0 }}
@@ -47,7 +47,7 @@ const Sidebar = ({ onCloseSideBar }) => {
             <img className="cart-icon" src={bag} />
           </Link>
         </li>
-      </motion.ul>
+      </ul>
     </div>
   );
 };

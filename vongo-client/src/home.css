@@ -13,6 +13,20 @@
   text-shadow: 3px 3px 40px #000000;
 }
 
+.main-heading {
+  margin-top: 7rem;
+  font-size: 3rem;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: 350;
+  line-height: 60px;
+}
+.sub-heading{
+  text-align: center;
+  font-family: sans-serif;
+}
+
+
 .home-image-text {
   font-size: calc(4vw + 1em);
 }
@@ -80,6 +94,10 @@ html {
 @media screen and (min-width: 480px) {
   .body1 {
     margin: 8rem;
+  }
+  .main-heading{
+    font-size: 6rem;
+    line-height: 100px;
   }
   .about-vongo {
     padding: 8rem;

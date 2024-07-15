@@ -18,7 +18,7 @@ const ContactForm = () => {
     number: "",
     address: "",
     city: "",
-    zipCode: ""
+    zipCode: "", 
   });
 
   const autocompleteRef = useRef(null);
@@ -68,8 +68,9 @@ const ContactForm = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
 
     // Ensure formData and cartItems are defined and in scope
     // Assuming formData and cartItems are obtained from component state or props
@@ -94,6 +95,16 @@ const ContactForm = () => {
     console.log("this is your order", customerOrder);
     console.log("this is your cart", cartUser);
     console.log("this is your full order", newOrder);
+
+    try {
+      const response = await axios.post("/api/payfast", formData);
+      const { redirectUrl } = response.data;
+      window.location.href = redirectUrl;
+    } catch (error) {
+      console.error('Error initiating payment:', error);
+      alert('Error initiating payment');
+    }
+
 
     // Post newOrder to the backend
     axios

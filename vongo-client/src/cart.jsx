@@ -19,42 +19,12 @@ const Cart = () => {
 
   const axiosInstance = axios.create({baseURL: process.env.REACT_APP_API_URL, })
 
-  async function handlePayment() {
-    var paymentPrice = totalPrice * 100;
-    console.log(paymentPrice);
-    const paymentInfo = {
-        "amount": totalPrice,
-        "currency": "ZAR"
-      
-    };
-    console.log(paymentInfo);
-    try {
-      const response = await axiosInstance.post("/api/payment", paymentInfo);
-      console.log("response is", response.data);
-      const redirectUrl = response.data.data.redirectUrl;
-      const checkoutID = response.data.data.id;
-
-      const popupWindow = window.open(redirectUrl, '_blank', 'width=600,height=400');
-      
-      // Optional: You can focus the popup window if needed
-      if (popupWindow) {
-        popupWindow.focus();
-      }
-      return response;
-      
-    } 
-   
-    
-    catch (error) {
-      console.log(error, "YOURE A DUMB NAAI");
-      throw error;
-    }
-    
-  }
+  
 
  
 
   return (
+    <>
     <div className="cart-grid">
       {cartItems.length < 1 && <Emptycart />}
 
@@ -108,8 +78,10 @@ const Cart = () => {
         </>
       )}
 
-      <Footer />
+     
     </div>
+    <Footer />
+    </>
   );
 };
 
