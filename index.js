@@ -44,7 +44,7 @@ app.post("/api/sendemail/receipt", handlemail);
 
 
 app.post("/api/payfast", (req, res) => {
-  const { amount, name, email, number, address, city, zipCode } = req.body;
+  const { name, surname, amount, email, item } = req.body;
  
 
   try {

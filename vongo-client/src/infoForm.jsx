@@ -14,6 +14,7 @@ const ContactForm = () => {
     
   const [formData, setFormData] = useState({
     name: "",
+    surname: "", 
     email: "",
     number: "",
     address: "",
@@ -85,6 +86,23 @@ const ContactForm = () => {
     // Combine form data and cart items into a single object
     const newOrder = { ...formData, cart: cartUser };
 
+    let totalPrice = 0;
+
+// Loop through each item in the 'cart' array and add up the prices
+for (let i = 0; i < newOrder.cart.length; i++) {
+    totalPrice += newOrder.cart[i].price;
+}
+    console.log("TEST", totalPrice);
+
+   
+let payfastData = {
+  name: formData.name ,
+  surname: formData.surname ,
+  amount: totalPrice ,
+  email: formData.email,
+  item: formData.capacity,
+}
+
     // Add the new order to the customerOrder array
     setCustomerOrder((prevOrders) => {
         const updatedOrders = [...prevOrders, newOrder];
@@ -92,12 +110,14 @@ const ContactForm = () => {
         return updatedOrders;
     });
 
+
     console.log("this is your order", customerOrder);
     console.log("this is your cart", cartUser);
     console.log("this is your full order", newOrder);
 
+    console.log("payfast", payfastData);
     try {
-      const response = await axios.post("/api/payfast", formData);
+      const response = await axios.post("/api/payfast", payfastData);
       const { redirectUrl } = response.data;
       window.location.href = redirectUrl;
     } catch (error) {
@@ -105,6 +125,7 @@ const ContactForm = () => {
       alert('Error initiating payment');
     }
 
+    
 
     // Post newOrder to the backend
     axios
@@ -117,6 +138,7 @@ const ContactForm = () => {
         });
 
     // Send email
+    /*
     axios
         .post("/api/sendemail/receipt", newOrder)
         .then((response) => {
@@ -125,6 +147,7 @@ const ContactForm = () => {
         .catch((error) => {
             console.error("Error sending email", error);
         });
+        */
 };
 
 
@@ -143,12 +166,24 @@ const ContactForm = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Name & Surname:</label>
+        <label htmlFor="name">Name:</label>
         <input
           type="text"
           id="name"
           name="name"
           value={formData.name}
+          onChange={handleChange}
+          required
+          className="input-form"
+        />
+      </div>
+      <div>
+        <label htmlFor="surname">Surname:</label>
+        <input
+          type="text"
+          id="surname"
+          name="surname"
+          value={formData.surname}
           onChange={handleChange}
           required
           className="input-form"
