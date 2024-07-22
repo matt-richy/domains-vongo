@@ -9,7 +9,7 @@ require("./models/cart");
 require("./models/usercart");
 require("./models/newsletter.js")
 const handlemail = require("./handlemail.js");
-const { generatePayFastRedirectUrl, verifySignature } = require('./payfast');
+const { generateSignature } = require('./payfast');
 
 
 

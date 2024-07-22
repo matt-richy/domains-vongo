@@ -6,7 +6,6 @@ import larFlask from "./photos/iceflowcharc2.webp";
 import larFlask2 from "./photos/iceflowcharc3.webp";
 import { useCart } from "./cartContext";
 import axios from "axios";
-import { motion, } from "framer-motion";
 import Popup from "./addCartpop";
 import { Imageswiper } from "./Imageswipe.tsx";
 import Footer from "./footer";

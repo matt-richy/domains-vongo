@@ -8,7 +8,8 @@ const generateSignature = (data, passPhrase = null) => {
   for (let key in data) {
     if(data.hasOwnProperty(key)){
       if (data[key] !== "") {
-        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
+        const value = String(data[key]).trim();
+        pfOutput +=`${key}=${encodeURIComponent(value).replace(/%20/g, "+")}&`
       }
     }
   }

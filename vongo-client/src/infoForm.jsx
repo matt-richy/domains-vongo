@@ -100,10 +100,10 @@ for (let i = 0; i < newOrder.cart.length; i++) {
 let payfastData = {
   name_first: formData.name ,
   name_last: formData.surname ,
-  amount: totalPrice ,
+  amount: totalPrice.toFixed(2),
   email_address: formData.email,
-  cell_number: formData.number,
-  item_name: formData.capacity,
+  cell_number: '0716138265',
+  item_name: "vongo",
 }
 
 
@@ -124,18 +124,25 @@ let payfastData = {
       const response = await axios.post('/api/payfast', payfastData);
       const data = response.data;
 
-      const pfHost = "www.payfast.co.za";
-      let form = `<form action="https://${pfHost}/eng/process" method="post">`;
+      const form = document.createElement('form');
+      form.action = "https://www.payfast.co.za/eng/process";
+      form.method = "POST";
+      form.target = "_blank"; // Open in a new window
+
       for (let key in data) {
         if (data.hasOwnProperty(key)) {
-          const value = data[key];
-          if (value !== "") {
-            form += `<input name="${key}" type="hidden" value="${value.trim()}" />`;
-          }
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = key;
+          input.value = String(data[key]).trim();
+          form.appendChild(input);
         }
       }
-      form += '<input type="submit" value="Pay Now" /></form>';
-      setHtmlForm(form);
+
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+
     } catch (error) {
       console.error('Error processing payment:', error);
     }
