@@ -43,33 +43,41 @@ app.post("/api/sendemail/receipt", handlemail);
 //below code hanldes the payment using payfast API 
 
 
-app.post("/api/payfast", (req, res) => {
-  const { name, surname, amount, email, item } = req.body;
- 
+app.post('/api/payfast', (req, res) => {
+  const myData = {
+    merchant_id: process.env.MERCHANT_ID ,
+    merchant_key: process.env.MERCHANT_KEY,
+    return_url: process.env.RETURN_URL,
+    cancel_url: process.env.CANCEL_URL,
+    notify_url: process.env.NOTIFY_URL,
+    ...req.body // Merge the request body (user-provided data) with the fixed merchant data
+  };
 
-  try {
-    const redirectUrl = generatePayFastRedirectUrl({ amount, name, email });
-    res.json({ redirectUrl });
-  } catch (error) {
-    console.error('Error generating PayFast redirect URL:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  const myPassphrase = process.env.PASSPHRASE;
+  myData.signature = generateSignature(myData, myPassphrase);
+
+  res.json(myData);
 });
 
-app.post('/api/notify', (req, res) => {
-  const data = req.body;
+app.get('/return_url', (req, res) => {
+  // Handle the return from PayFast
+  // You can access the transaction details via req.query
+  res.send('Payment was successful.');
+});
 
-  try {
-    if (verifySignature(data, payfast.passphrase)) {
-      // Update order status in your database
-      res.sendStatus(200);
-    } else {
-      res.status(400).json({ error: 'Invalid signature' });
-    }
-  } catch (error) {
-    console.error('Error verifying PayFast signature:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+// Endpoint to handle payment cancellation
+app.get('/cancel_url', (req, res) => {
+  // Handle the cancelation from PayFast
+  // You can access the transaction details via req.query
+  res.send('Payment was canceled.');
+});
+
+// Endpoint to handle payment notification
+app.post('/notify_url', (req, res) => {
+  // Handle the notification from PayFast
+  // You can access the transaction details via req.body
+  console.log('Payment notification received:', req.body);
+  res.send('Notification received.');
 });
 
 

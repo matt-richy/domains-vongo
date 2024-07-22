@@ -52,6 +52,8 @@ const ContactForm = () => {
     autocompleteRef.current = autocomplete;
   }, []);
 
+  const [htmlForm, setHtmlForm] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -96,12 +98,14 @@ for (let i = 0; i < newOrder.cart.length; i++) {
 
    
 let payfastData = {
-  name: formData.name ,
-  surname: formData.surname ,
+  name_first: formData.name ,
+  name_last: formData.surname ,
   amount: totalPrice ,
-  email: formData.email,
-  item: formData.capacity,
+  email_address: formData.email,
+  cell_number: formData.number,
+  item_name: formData.capacity,
 }
+
 
     // Add the new order to the customerOrder array
     setCustomerOrder((prevOrders) => {
@@ -117,12 +121,23 @@ let payfastData = {
 
     console.log("payfast", payfastData);
     try {
-      const response = await axios.post("/api/payfast", payfastData);
-      const { redirectUrl } = response.data;
-      window.location.href = redirectUrl;
+      const response = await axios.post('/api/payfast', payfastData);
+      const data = response.data;
+
+      const pfHost = "www.payfast.co.za";
+      let form = `<form action="https://${pfHost}/eng/process" method="post">`;
+      for (let key in data) {
+        if (data.hasOwnProperty(key)) {
+          const value = data[key];
+          if (value !== "") {
+            form += `<input name="${key}" type="hidden" value="${value.trim()}" />`;
+          }
+        }
+      }
+      form += '<input type="submit" value="Pay Now" /></form>';
+      setHtmlForm(form);
     } catch (error) {
-      console.error('Error initiating payment:', error);
-      alert('Error initiating payment');
+      console.error('Error processing payment:', error);
     }
 
     
@@ -251,6 +266,7 @@ let payfastData = {
         />
       </div>
       <button className="pay-button" type="submit">Continue to payment</button>
+      {htmlForm && <div dangerouslySetInnerHTML={{ __html: htmlForm }} />}
     </form>
   );
 };
