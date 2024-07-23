@@ -65,7 +65,7 @@ app.post('/api/payfast', (req, res) => {
   const myPassphrase = process.env.PASSPHRASE;
   myData["signature"] = generateSignature(myData, myPassphrase);
 
-  let htmlForm = `<form action="https://www.payfast.co.za/eng/process" method="post">`;
+  let htmlForm = `<form action="https://sandbox.payfast.co.za/eng/process" method="post">`;
   for (let key in myData) {
     if (myData.hasOwnProperty(key)) {
       const value = myData[key];
