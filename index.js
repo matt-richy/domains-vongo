@@ -44,19 +44,40 @@ app.post("/api/sendemail/receipt", handlemail);
 
 
 app.post('/api/payfast', (req, res) => {
-  const myData = {
-    merchant_id: process.env.MERCHANT_ID ,
-    merchant_key: process.env.MERCHANT_KEY,
-    return_url: process.env.RETURN_URL,
-    cancel_url: process.env.CANCEL_URL,
-    notify_url: process.env.NOTIFY_URL,
-    ...req.body // Merge the request body (user-provided data) with the fixed merchant data
-  };
+  const myData = req.body;
+
+    myData["merchant_id"]=  process.env.MERCHANT_ID ;
+    myData["merchant_key"]= process.env.MERCHANT_KEY;
+    myData["return_url"] = process.env.RETURN_URL;
+    myData["cancel_url"] = process.env.CANCEL_URL;
+    myData["notify_url"] = process.env.NOTIFY_URL;
+
+    myData["name_first"] = myData.name_first;
+    myData["name_last"] = myData.name_last;
+    myData["email_address"] = myData.email_address;
+
+    myData['m_payment_id'] = "1234"; // This should be dynamically generated in a real app
+    myData['amount'] = "899.00";      // This should be dynamic based on the order
+    myData['item_name'] = "vongo";
+    
+
 
   const myPassphrase = process.env.PASSPHRASE;
-  myData.signature = generateSignature(myData, myPassphrase);
+  myData["signature"] = generateSignature(myData, myPassphrase);
 
-  res.json(myData);
+  let htmlForm = `<form action="https://www.payfast.co.za/eng/process" method="post">`;
+  for (let key in myData) {
+    if (myData.hasOwnProperty(key)) {
+      const value = myData[key];
+      if (value !== "") {
+        htmlForm += `<input name="${key}" type="hidden" value="${value.trim()}" />`;
+      }
+    }
+  }
+  htmlForm += '<input type="submit" value="Pay Now" /></form>';
+
+  // Send the form back as the response
+  res.send(htmlForm);
 });
 
 app.get('/return_url', (req, res) => {

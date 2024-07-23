@@ -8,8 +8,7 @@ const generateSignature = (data, passPhrase = null) => {
   for (let key in data) {
     if(data.hasOwnProperty(key)){
       if (data[key] !== "") {
-        const value = String(data[key]).trim();
-        pfOutput +=`${key}=${encodeURIComponent(value).replace(/%20/g, "+")}&`
+        pfOutput +=`${key}=${encodeURIComponent(data[key].trim()).replace(/%20/g, "+")}&`
       }
     }
   }
@@ -21,9 +20,7 @@ const generateSignature = (data, passPhrase = null) => {
   }
 
   return crypto.createHash("md5").update(getString).digest("hex");
-}
-
-
+}; 
 
 
 module.exports = {

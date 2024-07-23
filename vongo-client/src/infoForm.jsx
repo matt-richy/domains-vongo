@@ -121,30 +121,16 @@ let payfastData = {
 
     console.log("payfast", payfastData);
     try {
-      const response = await axios.post('/api/payfast', payfastData);
-      const data = response.data;
+      const response = await axios.post('/api/payfast', {
+        name_first: formData.name,
+        name_last: formData.surname,
+        email_address: formData.email
+        // Add any other buyer details here if needed
+      });
 
-      const form = document.createElement('form');
-      form.action = "https://www.payfast.co.za/eng/process";
-      form.method = "POST";
-      form.target = "_blank"; // Open in a new window
-
-      for (let key in data) {
-        if (data.hasOwnProperty(key)) {
-          const input = document.createElement('input');
-          input.type = 'hidden';
-          input.name = key;
-          input.value = String(data[key]).trim();
-          form.appendChild(input);
-        }
-      }
-
-      document.body.appendChild(form);
-      form.submit();
-      document.body.removeChild(form);
-
+      setHtmlForm(response.data);
     } catch (error) {
-      console.error('Error processing payment:', error);
+      console.error("Error generating payment form:", error);
     }
 
     
