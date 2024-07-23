@@ -44,7 +44,8 @@ app.post("/api/sendemail/receipt", handlemail);
 
 
 app.post('/api/payfast', (req, res) => {
-  const myData = req.body;
+  const paymentData = req.body;
+  const myData = []
 
     myData["merchant_id"]=  process.env.MERCHANT_ID ;
     myData["merchant_key"]= process.env.MERCHANT_KEY;
@@ -52,12 +53,12 @@ app.post('/api/payfast', (req, res) => {
     myData["cancel_url"] = process.env.CANCEL_URL;
     myData["notify_url"] = process.env.NOTIFY_URL;
 
-    myData["name_first"] = myData.name_first;
-    myData["name_last"] = myData.name_last;
-    myData["email_address"] = myData.email_address;
+    myData["name_first"] = paymentData.name_first;
+    myData["name_last"] = paymentData.name_last;
+    myData["email_address"] = paymentData.email_address;
 
     myData['m_payment_id'] = "1234"; // This should be dynamically generated in a real app
-    myData['amount'] = "899.00";      // This should be dynamic based on the order
+    myData['amount'] = paymentData.amount;      // This should be dynamic based on the order
     myData['item_name'] = "vongo";
     
 
@@ -80,26 +81,7 @@ app.post('/api/payfast', (req, res) => {
   res.send(htmlForm);
 });
 
-app.get('/return_url', (req, res) => {
-  // Handle the return from PayFast
-  // You can access the transaction details via req.query
-  res.send('Payment was successful.');
-});
 
-// Endpoint to handle payment cancellation
-app.get('/cancel_url', (req, res) => {
-  // Handle the cancelation from PayFast
-  // You can access the transaction details via req.query
-  res.send('Payment was canceled.');
-});
-
-// Endpoint to handle payment notification
-app.post('/notify_url', (req, res) => {
-  // Handle the notification from PayFast
-  // You can access the transaction details via req.body
-  console.log('Payment notification received:', req.body);
-  res.send('Notification received.');
-});
 
 
 app.post("/api/subscribe", async(req, res) => {

@@ -22,9 +22,9 @@ export default function App() {
           <Route exact path="Purchase" element={<Buy />} />
           <Route exact path="/" element={<Homepage />} />
           <Route path="Cart" element={<Cart />} />
-          <Route path="/return_url" component={ReturnPage} />
-        <Route path="/cancel_url" component={CancelPage} />
-        <Route path="/notify_url" component={NotifyPage} />
+          <Route path="/return_url" element={< ReturnPage />} />
+        <Route path="/cancel_url" element={< CancelPage />} />
+        <Route path="/notify_url" element={< NotifyPage />} />
         </Routes>
       </CartProvider>
     </Router>

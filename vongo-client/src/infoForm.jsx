@@ -124,7 +124,8 @@ let payfastData = {
       const response = await axios.post('/api/payfast', {
         name_first: formData.name,
         name_last: formData.surname,
-        email_address: formData.email
+        email_address: formData.email,
+        amount: totalPrice.toFixed(2)
         // Add any other buyer details here if needed
       });
 
