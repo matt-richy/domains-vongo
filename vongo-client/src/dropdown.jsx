@@ -28,9 +28,7 @@ const Sidebar = ({ onCloseSideBar }) => {
     <div className="sidebar" ref={sidebarRef}>
       <ul
         className="sidebars"
-        initial={{ x: "-100%" }}
-        animate={{ x: 0 }}
-        transition={{ type: "spring", stiffness: 120 }}
+     
       >
         <li>
           <Link to="/" onClick={handleLinkClick}>

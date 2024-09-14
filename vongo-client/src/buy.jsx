@@ -1,6 +1,7 @@
 import React from "react";
 import "./index.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import medFlask from "./photos/iceflowCharc.webp";
 import larFlask from "./photos/iceflowcharc2.webp";
 import larFlask2 from "./photos/iceflowcharc3.webp";
@@ -43,7 +44,7 @@ const bottles = [
 ];
 
 export default function Buy() {
-
+  const location = useLocation();
  
   const { cartItems, addToCart } = useCart();
   const [togglePopup, setPopup] = useState(false);
@@ -73,8 +74,6 @@ export default function Buy() {
   };
 
 
-
-
   const [useQuant, setQuant] = useState(1);
 
   function addQuant() {
@@ -85,28 +84,51 @@ export default function Buy() {
     if (useQuant > 1) setQuant((s) => s - 1);
   }
 
+  
+
+  const [bottleSize, setBottleSize] = useState("medium");
+  const [bottleColour, setBottleColour] = useState("white");
+
+
+  //gets the size of the bottle based on the home page - if pressed medium or large from home page 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const size = searchParams.get("size");
+    if (size) {
+      if (size === "large") {
+        setBottleSize("large");
+        setClicked((prevClicked) => !prevClicked); // Toggle the clicked state
+      } else {
+        setBottleSize("medium");
+      }
+    }
+
+  }, [location.search]);
+  
+
   const [clicked, setClicked] = useState(true);
 
-  function handleClick() {
-    console.log("clicked");
+  const handleClick = () => {
+     console.log("clicked");
     setClicked(!clicked);
     if (clicked) setBottleSize("large");
     else setBottleSize("medium");
-  }
+  };
+
+
   const style = {
     opacity: 0.9,
   };
   const selectedStyle = {
     opacity: 1,
-    height: "4.8rem",
-    width: "4.8rem",
+    outline: "2px solid blue",
+    outlineOffset: "4px",
   };
 
   // next few lines of code are to handle
   // what image gets loaded - ie medium, large and then the colours
 
-  const [bottleSize, setBottleSize] = useState("medium");
-  const [bottleColour, setBottleColour] = useState("black");
+
 
 
   //colour 1 = white
@@ -228,7 +250,8 @@ export default function Buy() {
             </div>
             <div className="quantity-price">
               <div className="total-price">
-                <p1>COLOUR : {bottleColour} </p1>
+                <h2 className="price-text">Colour:  </h2>
+                <h2 className="price-text">{bottleColour} </h2>
               </div>
 
               <div className="quantity">
@@ -242,7 +265,8 @@ export default function Buy() {
                 </button>
               </div>
               <div className="total-price">
-                <p1>TOTAL : R{useQuant * items.srcs[bottleSize].price}</p1>
+                <h2 className="price-text">Price:</h2>
+                <h2 className="price-text"> R{useQuant * items.srcs[bottleSize].price}</h2>
               </div>
               <div className="snowflake">
               <h1>&#10052;</h1>
@@ -265,7 +289,7 @@ export default function Buy() {
               {togglePopup ? (
                 <Popup
                   onClosePopup={togglePop}
-                  bottlecap={items.srcs[bottleSize].capacity}
+                  bottlecap={bottleSize}
                   price={items.srcs[bottleSize].price}
                   colour={bottleColour}
                   qty = {useQuant}

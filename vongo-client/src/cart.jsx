@@ -1,86 +1,112 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "./cartContext";
 import "./cart.css";
-import axios from "axios";
-import { motion } from "framer-motion";
 import bin from "./photos/recycle-bin.png";
 import Emptycart from "./emptycart";
 import ContactForm from "./infoForm";
 import Footer from "./footer";
+import dropdown from "./photos/down-arrow-2.png"
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, updateCartQuantity } = useCart(); // Assuming updateCartQuantity is a function that updates the quantity in the cart context
 
+  // Calculate the total price
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
-  var totalPrice = 0;
-  for (let i = 0; i < cartItems.length; i++) {
-    totalPrice += cartItems[i].price * cartItems[i].quantity;
-  }
-
-  const axiosInstance = axios.create({baseURL: process.env.REACT_APP_API_URL, })
-
-  
-
- 
+  const handleQuantityChange = (event, itemId) => {
+    const newQuantity = parseInt(event.target.value, 10);
+    updateCartQuantity(itemId, newQuantity); // Update the quantity using a context or state function
+  };
 
   return (
     <>
-    <div className="cart-grid">
-      {cartItems.length < 1 && <Emptycart />}
+      <div className="cart-grid">
+        {cartItems.length < 1 && <Emptycart />}
 
-      <div className="cart-info">
-        {cartItems.length > 0 && (
-          <div className="cart-heading">
-            <h1>CART SUMMARY</h1>
-          </div>
-        )}
+        <div className="cart-info">
+          {cartItems.length > 0 && (
+            <div className="cart-heading">
+              <h1 className="cart-heading-h1">Review your bag.</h1>
+            </div>
+          )}
 
-        {cartItems.map((item, index) => (
-          <div className="cart-items-grid" key={index}>
-            <div className="items-in-cart" key={index}>
-              <img className="image-in-cart" src={item.src} />
+          {cartItems.map((item, index) => (
+            <div className="cart-items-grid" key={index}>
+              <div className="items-in-cart">
+                <img className="image-in-cart" src={item.src} alt="Cart item" />
+              </div>
               <div className="bottle-cart-info">
+                <div className="item-header">
+                  <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
+                </div>
+
                 <h3 className="cart-item-text">
-                  {item.capacity}
-                  <br />
                   COLOUR: {item.colour}
                   <br />
-                  QTY: {item.quantity}
-                  <br />
-                  PRICE: {item.price * item.quantity}
+                  
                 </h3>
-                <motion.button
-                  id={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="remove-button"
-                  onClick={() => removeFromCart(index)}
+                <div className="dropdown-selector-div"> 
+                <select
+                  className="qty-selector"
+                  id="number-dd"
+                  name="number"
+                  value={item.quantity} // Set the selected value
+                  onChange={(event) => handleQuantityChange(event, item.id)} // Handle change event with item ID
                 >
-                  <img src={bin} className="trash-icon" />
-                </motion.button>{" "}
+                  {[...Array(10).keys()].map((num) => (
+                    <option key={num + 1} value={num + 1}>
+                      {num + 1}
+                    </option>
+                  ))}
+                </select>
+                <span className="dropdown-icon-span">
+                  <img src={dropdown} className="dropdown-icon"/>
+                </span>
+                </div>
+              </div>
+              <div className="item-price-div">
+                <div className="item-price">
+                  <h1 className="individual-item-price">R{item.price * item.quantity}</h1>
+                </div>
+                <div className="remove-button-div">
+                  <button id={index} className="remove-button" onClick={() => removeFromCart(index)}>
+                    <h2 className="remove-button-text">Remove</h2>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {cartItems.length > 0 && (
-          <div className="total">
-            <h3 className="price-excl-shipping">PRICE EXCL. SHIPPING:</h3>
-            <div className="total-price">
-              <h3>
-                R{totalPrice} <br />
-              </h3>
+          ))}
+
+          {cartItems.length > 0 && (
+            <div className="total">
+              <div className="shipping-price">
+                <div>
+                  <h2 className="shipping-price-text">Shipping</h2>
+                </div>
+                <div>
+                  <h2 className="shipping-price-text">FREE</h2>
+                </div>
+              </div>
+              <div className="shipping-price">
+                <h2 className="shipping-price-text-t">Total</h2>
+                <div>
+                  <h2 className="shipping-price-text-t">R{totalPrice}</h2>
+                </div>
+              </div>
             </div>
+          )}
+        </div>
+        
+        {cartItems.length > 0 && (
+          <div>
+            <div className="form-header">
+              <h1 className="form-header-h1">Shipping information </h1>  
+            </div>
+            <ContactForm />
           </div>
         )}
       </div>
-      {cartItems.length > 0 && (
-        <><ContactForm />
-        </>
-      )}
-
-     
-    </div>
-    <Footer />
+      <Footer />
     </>
   );
 };

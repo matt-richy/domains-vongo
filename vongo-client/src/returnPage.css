@@ -1,3 +1,22 @@
 .main-div {
     text-align: center;
 }
+
+
+.general-details {
+    display: flex;
+    padding: 20px;
+    text-align: left;
+    justify-content: center;
+}
+
+.general-details-text {
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: 300;
+}
+
+.button-div {
+    display: flex;
+    justify-content: center;
+}

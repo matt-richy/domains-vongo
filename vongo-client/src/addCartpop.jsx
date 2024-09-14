@@ -32,7 +32,7 @@ const Popup = ({ onClosePopup, ...props }) => {
         </button>
         <h1>Added to Cart!</h1>
         <ul className="list-items">
-          <li>Size: {props.bottlecap}</li>
+          <li>Size: {props.bottlecap === 'medium' ? '1.9L' : '3.8L'}</li>
           <li>Price: R{props.price}</li>
           <li>Colour: {props.colour}</li>
           <li>QTY: {props.qty}</li>

@@ -22,37 +22,52 @@ const ContactForm = () => {
     zipCode: "", 
   });
 
+
   const autocompleteRef = useRef(null);
-  const addressInputRef = useRef(null);
+const addressInputRef = useRef(null);
+
 
   useEffect(() => {
+    if (!window.google || !window.google.maps || !window.google.maps.places) {
+      console.warn("Google Maps API not available.");
+      return;
+    }
+  
     const autocomplete = new window.google.maps.places.Autocomplete(
       addressInputRef.current,
       { types: ["address"] }
     );
-
+  
     autocomplete.addListener("place_changed", () => {
       const place = autocomplete.getPlace();
-      const address = place.formatted_address;
-      const city = place.address_components.find(component =>
+      const address = place.formatted_address || "";
+      const city = place.address_components?.find(component =>
         component.types.includes("locality")
-      )?.long_name;
-      const zipCode = place.address_components.find(component =>
+      )?.long_name || "";
+      const zipCode = place.address_components?.find(component =>
         component.types.includes("postal_code")
-      )?.long_name;
-
+      )?.long_name || "";
+  
       setFormData((prevData) => ({
         ...prevData,
-        address: address || "",
-        city: city || "",
-        zipCode: zipCode || ""
+        address,
+        city,
+        zipCode,
       }));
     });
-
+  
     autocompleteRef.current = autocomplete;
+  
+    return () => {
+      // Cleanup to avoid memory leaks
+      if (autocomplete) {
+        window.google.maps.event.clearInstanceListeners(autocomplete);
+      }
+    };
   }, []);
 
-  const [htmlForm, setHtmlForm] = useState('');
+
+  const [htmlForm, setHtmlForm] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,19 +107,12 @@ const ContactForm = () => {
 
 // Loop through each item in the 'cart' array and add up the prices
 for (let i = 0; i < newOrder.cart.length; i++) {
-    totalPrice += newOrder.cart[i].price;
+    totalPrice += (newOrder.cart[i].price * newOrder.cart[i].quantity )  ;
 }
     console.log("TEST", totalPrice);
 
    
-let payfastData = {
-  name_first: formData.name ,
-  name_last: formData.surname ,
-  amount: totalPrice.toFixed(2),
-  email_address: formData.email,
-  cell_number: '0716138265',
-  item_name: "vongo",
-}
+
 
 
     // Add the new order to the customerOrder array
@@ -119,13 +127,14 @@ let payfastData = {
     console.log("this is your cart", cartUser);
     console.log("this is your full order", newOrder);
 
-    console.log("payfast", payfastData);
+    
     try {
       const response = await axios.post('/api/payfast', {
         name_first: formData.name,
         name_last: formData.surname,
         email_address: formData.email,
-        amount: totalPrice.toFixed(2)
+        amount: totalPrice.toFixed(2),
+        cell_number: paymentNumber(formData.number),
         // Add any other buyer details here if needed
       });
 
@@ -172,10 +181,15 @@ let payfastData = {
     return value;
   };
 
+  const paymentNumber = (number) => {
+    return number.replace(/\s+/g, '');
+  }
+
   return (
+    <div className="div-form">
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="name">Name:</label>
+        <label  htmlFor="name">Name:</label> <br />
         <input
           type="text"
           id="name"
@@ -187,7 +201,7 @@ let payfastData = {
         />
       </div>
       <div>
-        <label htmlFor="surname">Surname:</label>
+        <label htmlFor="surname">Surname:</label>  <br />
         <input
           type="text"
           id="surname"
@@ -199,7 +213,7 @@ let payfastData = {
         />
       </div>
       <div>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">Email:</label>  <br />
         <input
           type="email"
           id="email"
@@ -211,7 +225,7 @@ let payfastData = {
         />
       </div>
       <div>
-        <label htmlFor="number">Phone Number:</label>
+        <label htmlFor="number">Phone Number:</label>  <br />
         <input
           type="tel"
           id="number"
@@ -220,10 +234,12 @@ let payfastData = {
           onChange={handleChange}
           required
           className="input-form"
+          maxLength={12}
+          minLength={12}
         />
       </div>
       <div>
-        <label htmlFor="address">Address:</label>
+        <label htmlFor="address">Address:</label>  <br />
         <input
           type="text"
           id="address"
@@ -236,7 +252,7 @@ let payfastData = {
         />
       </div>
       <div>
-        <label htmlFor="city">City:</label>
+        <label htmlFor="city">City:</label>  <br />
         <input
           type="text"
           id="city"
@@ -248,7 +264,7 @@ let payfastData = {
         />
       </div>
       <div>
-        <label htmlFor="zipCode">Zip Code:</label>
+        <label htmlFor="zipCode">Zip Code:</label>  <br />
         <input
           type="text"
           id="zipCode"
@@ -259,9 +275,18 @@ let payfastData = {
           className="input-form"
         />
       </div>
+      <div className="pay-button-div"> 
       <button className="pay-button" type="submit">Continue to payment</button>
-      {htmlForm && <div dangerouslySetInnerHTML={{ __html: htmlForm }} />}
+    
+
+      </div>
+     
     </form>
+   
+    {htmlForm && <div className="actual-pay" dangerouslySetInnerHTML={{ __html: htmlForm }} />}
+   
+  
+    </div>
   );
 };
 

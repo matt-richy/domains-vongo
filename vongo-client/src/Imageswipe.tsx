@@ -90,7 +90,7 @@ export const Imageswiper: React.FC<ImageSwiperProps> = (props) => {
         position: "relative",
         display: "flex",
         justifyContent: "center",
-        height: "75vh",
+        height: "auto",
         width: "100%",
         top: "1rem",
       }}
@@ -102,7 +102,7 @@ export const Imageswiper: React.FC<ImageSwiperProps> = (props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "500px",
+            width: "100%",
           }}
           key={page}
           src={images[0][props.size][props.colour][imageIndex]}

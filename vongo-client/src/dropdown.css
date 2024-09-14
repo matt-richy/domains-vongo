@@ -22,7 +22,7 @@ a {
 .sidebar {
   text-align: left;
   position: fixed;
-  opacity: 90%;
+  opacity: 95%;
   left: 0rem;
   top: 0;
   z-index: 50;
@@ -31,6 +31,9 @@ a {
   padding-top: 8rem;
   padding-left: 3rem;
   background-color: rgb(243, 239, 235);
+  backdrop-filter: blur(50px); /* Apply the blur effect */
+  -webkit-backdrop-filter: blur(10px); /* For Safari support */
+
 }
 
 .cart-icon {

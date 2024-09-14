@@ -5,28 +5,79 @@
     height: 3rem;
     width: 100%;
     margin-top: 1rem;
-    margin-right: 1rem;
+    margin-right: 10px;
     margin-bottom: 1rem;
     box-sizing: border-box;
-   
+    border-style: none;
+  border-radius: 8px;
     
   }
+
+
   
 .input-form:focus {
   border: 1px solid black ;
   outline:none;
 }
 
+.input-form:user-valid {
+  outline-color: black;
+}
+
+.input-form:invalid {
+  border: 1px solid red;
+}
+
 
   .pay-button {
-    background-color: #A5a896;
+    background-color: #00334C;
+    font-weight: 300;
     border: none;
     font-family: sans-serif;
     font-size: 1.5rem;
     width: 100%;
     height: 70px;
     cursor: pointer;
-    color: #4F493F;
+    color: white;
+    border-radius: 8px;
+    max-width: 600px;
   }
 
+  .actual-pay {
+    display: flex;
+    margin-top: 30px;
+    width: 100%;
+    justify-content: center;
+    
+
+  }
+
+
+.div-form {
+  padding: 15px;
+}
+
+.pay-button-div {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 50px;
+  
+}
  
+
+
+@media screen and (min-width: 480px) {
+  .input-form {
+    width: 600px;
+  }
+
+  .div-form {
+    display: flex;
+ 
+    align-items: center;
+    flex-direction: column;
+
+  }
+    
+}

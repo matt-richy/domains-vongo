@@ -5,19 +5,19 @@ const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     // Initialize the cart state from local storage
-    const savedCartItems = localStorage.getItem('cartItems');
+    const savedCartItems = localStorage.getItem("cartItems");
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
   // Use useEffect to update local storage whenever cartItems changes
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const addToCart = (item) => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = [...prevCartItems, item];
-      localStorage.setItem('cartItems', JSON.stringify(updatedCartItems)); // Update local storage immediately
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Update local storage immediately
       return updatedCartItems;
     });
   };
@@ -26,13 +26,23 @@ const CartProvider = ({ children }) => {
     setCartItems((prevCartItems) => {
       const newCartItems = [...prevCartItems];
       newCartItems.splice(index, 1);
-      localStorage.setItem('cartItems', JSON.stringify(newCartItems)); // Update local storage immediately
+      localStorage.setItem("cartItems", JSON.stringify(newCartItems)); // Update local storage immediately
       return newCartItems;
     });
   };
 
+  const updateCartQuantity = (itemId, newQuantity) => {
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((item) =>
+        item.id === itemId ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, updateCartQuantity }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -1,29 +1,176 @@
-.home-image {
-  display: flex;
-  background-image: url(./photos/river-delta.jpg);
-  background-size: cover;
-  background-position: center;
-  height: 700px;
-  text-align: center;
-  justify-content: center;
-  color: rgb(243, 239, 235);
-  font-size: 1rem;
-  width: 100%;
-  font-family: sans-serif;
-  text-shadow: 3px 3px 40px #000000;
+
+.first-thing-div {
+  min-height: 750px;
 }
 
-.main-heading {
+
+.main-heading-div {
+  display: flex; 
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+
+} 
+.heading-image-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heading-image {
+  width:100%;
+  height:auto; 
+}
+
+
+.main-heading { 
   margin-top: 7rem;
-  font-size: 3rem;
+  font-size: 70px;
   text-align: center;
   font-family: sans-serif;
   font-weight: 350;
-  line-height: 60px;
+  line-height: 85px;
 }
+
+.thirsty-font {
+  color: #B46F54;
+  font-weight: 400;
+}
+
+
 .sub-heading{
   text-align: center;
   font-family: sans-serif;
+  font-size: 2rem;
+  margin-top: 120px;
+}
+
+.info-cards {
+  padding-top: 80px;
+  height: 1450px;
+  background-color: white;
+  width:100%;
+}
+
+.grid-info-cards {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 1fr;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  gap: 50px;
+  
+}
+
+.grid-info-cards > * {
+  background-color: #F6F5F8;
+  width: 100%;
+  height: 600px;
+  border-radius: 28px;
+  transition: all 0.7s;
+ 
+
+}
+
+
+
+.grid-info-image {
+  width: 100%;
+  height: auto;
+  max-width: 350px;
+}
+
+.info-card-image {
+  display:flex;
+  justify-content: center;
+  margin-top: 30px;
+  margin: 20px;
+ 
+}
+.info-card-header {
+  display:flex;
+  justify-content: center;
+  font-family: sans-serif;
+}
+
+.info-card-header-text {
+  font-weight: 400;
+  font-size: 26px;
+}
+
+.info-card-text {
+  
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.info-card-stats {
+  font-weight: 330;
+  font-size: 18px;
+}
+
+.info-card-button {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.buy-now-button {
+  width: 110px;
+  height: 40px;
+  font-size: 18px;
+  font-weight: 330;
+  cursor: pointer;
+  border-radius: 980px;
+  border: none;
+  background-color: rgb(255, 138, 61);
+  color: #0d172a;
+}
+
+
+@media screen and (min-width: 480px) {
+
+  .main-heading-div {
+    flex-direction: row;
+    min-width: 50%;
+  }
+
+
+  .sub-heading {
+    margin-top: 150px;
+  }
+
+  .main-heading {
+    font-size: 300px;
+    font-weight: 380;
+  }
+
+  .info-cards {
+    height: auto;
+  }
+
+  .grid-info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 50px;
+    padding-bottom: 150px;
+    gap: 70px;
+  }
+
+  .grid-info-cards > * {
+   
+    height: 750px;
+    width: 100%;
+    max-width: 600px;
+   
+  }
+ 
+
 }
 
 
@@ -56,27 +203,35 @@ html {
 }
 
 .about-vongo {
+  
   padding-top: 3rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 24px;
+  padding-right: 16px;
   margin: 0;
-  background-color: #ced7d9;
-  font-size: 1rem;
-  text-align: center;
-  height: 800px;
+  background-color: #b9baa3c9;
+  font-size:  1rem;
+  text-align: left;
+  height: 1100px;
 }
 .main-text-header {
   font-family: sans-serif;
+  font-weight: 500;
+  font-size: 46px;
+  margin-bottom: 50px;
 }
 .main-text {
-  font-size: 1rem;
+  font-size: 18px;
   font-family: sans-serif;
-  font-weight: 300;
-  line-height: 30px
+  font-weight: 250;
+  line-height: 30px;
+  padding-bottom: 50px;
 }
 .shop-now-button{
-  padding-top: 3rem;
-  display: absolute;
+  
+  display: flex;
+  justify-content: center;
+  margin-bottom: 90px;
+  grid-column: span 2;
   
 }
 .button-shop {
@@ -100,8 +255,20 @@ html {
     line-height: 100px;
   }
   .about-vongo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
     padding: 8rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
+    height: 700px;
+  }
+
+  .info-card-image {
+    margin: 50px;
+  }
+ 
+  .main-text {
+    font-size: 20px;
   }
 
   .firstImage {
@@ -166,17 +333,17 @@ html {
 
 @keyframes imageAnimate {
   0% {
-    opacity: 0;
+    opacity: 0.7;
     transform: translateX(-1000px);
   }
-  80% {
-    transform: translateX(-50);
-  }
+
   100% {
     opacity: 1;
     transform: translateX(0);
   }
 }
+
+
 .grid-specs {
   padding: 1rem;
   padding-right:1rem;
@@ -216,6 +383,7 @@ html {
   .grid5 {
     grid-column: span 2;
   }
+  
 }
 
 @keyframes fadeInUp {

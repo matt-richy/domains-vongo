@@ -56,17 +56,16 @@ app.post('/api/payfast', (req, res) => {
     myData["name_first"] = paymentData.name_first;
     myData["name_last"] = paymentData.name_last;
     myData["email_address"] = paymentData.email_address;
+    myData["cell_number"] = paymentData.cell_number;
 
     myData['m_payment_id'] = "1234"; // This should be dynamically generated in a real app
     myData['amount'] = paymentData.amount;      // This should be dynamic based on the order
     myData['item_name'] = "vongo";
     
-
-
   const myPassphrase = process.env.PASSPHRASE;
   myData["signature"] = generateSignature(myData, myPassphrase);
 
-  let htmlForm = `<form action="https://sandbox.payfast.co.za/eng/process" method="post">`;
+  let htmlForm = `<form id="payfast-form" action="https://sandbox.payfast.co.za/eng/process" method="post">`;
   for (let key in myData) {
     if (myData.hasOwnProperty(key)) {
       const value = myData[key];
@@ -75,7 +74,8 @@ app.post('/api/payfast', (req, res) => {
       }
     }
   }
-  htmlForm += '<input type="submit" value="Pay Now" /></form>';
+  htmlForm += '<input type="submit" class="pay-button" value="Pay Now" /></form>';
+
 
   // Send the form back as the response
   res.send(htmlForm);
@@ -133,7 +133,6 @@ app.post('/api/addUser', async (req, res) => {
   }
 });
 
-//below code sends an email
 
 
 

@@ -55,7 +55,7 @@ const Footer = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className='input-form'
+                    className='input-1'
                 />
                 <button className="subscribe-button"type="submit" disabled={loading}>{loading ? 'Subscribing...' : message }</button>
             </form>
