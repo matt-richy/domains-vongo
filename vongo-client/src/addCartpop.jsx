@@ -36,6 +36,18 @@ const Popup = ({ onClosePopup, ...props }) => {
           <li>Price: R{props.price}</li>
           <li>Colour: {props.colour}</li>
           <li>QTY: {props.qty}</li>
+          {props.engraving && props.engraving.length > 0 && (
+            <li>
+              <strong>Engravings:</strong>
+              <ul className="engraving-list">
+                {props.engraving.map((text, index) => (
+                  <li key={index} className="engraving-item">
+                    Bottle {index + 1}: {text || "No engraving"}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          )}
         </ul>
         <Link to="/Cart">
           <img className="cart-icon" src={bag} />

@@ -2,15 +2,26 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './returnPage.css'
 import { useCart } from "./cartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import BottleInstructions from './bottleInstructions';
 
 const ReturnPage = () => {
   const { cartItems, removeFromCart, updateCartQuantity } = useCart()
 
+  const navigate = useNavigate();
+
+const handleClick = () => {
+  navigate('/')
+}
+
   return (
     <div className='main-div'>
-      <h1>Payment Successful</h1>
-      <p>Your payment was successful. Thank you!</p>
+      <div className='payment-success-div'> 
+      <h1 className='payment-heading'>Payment Successful</h1>
+      <p1 className="pi-text" >We received your payment! <br /> <br />
+      Thanks for shopping local! Please watch out for an email detailing your order and delivery details.
+      </p1>
+      </div>
 
       {cartItems.map((item, index) => (
             <div className="cart-items-grid" key={index}>
@@ -24,7 +35,10 @@ const ReturnPage = () => {
 
                 <h3 className="cart-item-text">
                   COLOUR: {item.colour}
+
+                 
                   <br />
+                  QTY: {item.quantity}
                   
                 </h3>
                
@@ -33,15 +47,16 @@ const ReturnPage = () => {
             </div>
           ))}
 
-      <div className='general-details'>
-          <p className='general-details-text'>Watch out for an email detailing the estimated delivery time! Thanks for supporting local! </p>
+     
+      <BottleInstructions />
+      
 
-          
-      </div>
+
       <div className='button-div'>
-      <Link to="/" className="button-shop" >
-            RETURN HOME
-          </Link>
+      <button className='try-again-button' onClick={handleClick}> 
+          Home
+
+      </button>
       </div>
       <div className='spacer'></div>
     </div>

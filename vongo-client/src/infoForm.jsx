@@ -7,8 +7,9 @@ import { useCart } from "./cartContext";
 
 const ContactForm = () => {
 
-  const { cartItems } = useCart();
+  const { cartItems, totPrice } = useCart();
   const [customerOrder, setCustomerOrder] = useState([]);
+
 
   
     
@@ -86,48 +87,67 @@ const addressInputRef = useRef(null);
   };
 
 
+  const getOrderNum = async (formData, price) => {
+    try {
+      // Make a POST request to the backend to get the order number
+      const response = await axios.post('/api/getOrderNum', {formData, price });
+  
+      // Assuming the response contains an object with the order number
+      const orderNumber = response.data.orderNumber;
+  
+      // Return the order number to the caller
+      return { orderNumber };
+    } catch (error) {
+      console.error("Error fetching order number:", error);
+      throw new Error("Failed to fetch order number");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-
-    // Ensure formData and cartItems are defined and in scope
-    // Assuming formData and cartItems are obtained from component state or props
-
+  
+    // Prepare cart data from cartItems
     const cartUser = cartItems.map(({ price, colour, quantity, capacity }) => ({
-        capacity,
-        price,
-        colour,
-        quantity,
+      capacity,
+      price,
+      colour,
+      quantity,
     }));
-
+  
     // Combine form data and cart items into a single object
-    const newOrder = { ...formData, cart: cartUser };
-
+    const newOrder = { ...formData, cart: cartUser, };
+  
+    // Calculate total price
     let totalPrice = 0;
-
-// Loop through each item in the 'cart' array and add up the prices
-for (let i = 0; i < newOrder.cart.length; i++) {
-    totalPrice += (newOrder.cart[i].price * newOrder.cart[i].quantity )  ;
-}
-    console.log("TEST", totalPrice);
+    newOrder.cart.forEach(item => {
+      totalPrice += item.price * item.quantity;
+    });
+    console.log("Total Price:", totalPrice);
 
    
-
-
-
-    // Add the new order to the customerOrder array
+  
+    // Fetch the order number before proceeding
+    let orderNumber;
+    try {
+      const response = await getOrderNum(formData, totalPrice); // Fetch order number from backend
+      orderNumber = response.orderNumber;   // Adjusted to access order number correctly
+      console.log("Order Number:", orderNumber);
+    } catch (error) {
+      console.error("Error fetching order number:", error);
+      return; // Exit the function if order number retrieval fails
+    }
+  
+    // Create full order object
+    const fullOrder = { ...newOrder, orderNumber }; // Combine newOrder with the orderNumber
+  
+    // Update the customer order state with the new order
     setCustomerOrder((prevOrders) => {
-        const updatedOrders = [...prevOrders, newOrder];
-        console.log("this is your updated customer order", updatedOrders);
-        return updatedOrders;
+      const updatedOrders = [...prevOrders, fullOrder];
+      console.log("Updated customer order:", updatedOrders);
+      return updatedOrders;
     });
-
-
-    console.log("this is your order", customerOrder);
-    console.log("this is your cart", cartUser);
-    console.log("this is your full order", newOrder);
-
-    
+  
+    // Send payment request to PayFast
     try {
       const response = await axios.post('/api/payfast', {
         name_first: formData.name,
@@ -135,38 +155,24 @@ for (let i = 0; i < newOrder.cart.length; i++) {
         email_address: formData.email,
         amount: totalPrice.toFixed(2),
         cell_number: paymentNumber(formData.number),
-        // Add any other buyer details here if needed
+        order_number: orderNumber, // Use fetched order number
       });
-
-      setHtmlForm(response.data);
+  
+      setHtmlForm(response.data); // Set the HTML form for the payment
     } catch (error) {
       console.error("Error generating payment form:", error);
     }
-
-    
-
-    // Post newOrder to the backend
-    axios
-        .post("/api/addUser", newOrder)
-        .then((response) => {
-            console.log("Order posted successfully", response.data);
-        })
-        .catch((error) => {
-            console.error("Error posting order", error);
-        });
-
-    // Send email
-    /*
-    axios
-        .post("/api/sendemail/receipt", newOrder)
-        .then((response) => {
-            console.log("Email sent successfully", response.data);
-        })
-        .catch((error) => {
-            console.error("Error sending email", error);
-        });
-        */
-};
+  
+    // Post the full order (with order number) to the backend
+    try {
+      await axios.post("/api/addUser", fullOrder);  // Post fullOrder instead of newOrder
+      console.log("Order posted successfully");
+    } catch (error) {
+      console.error("Error posting order:", error);
+    }
+  
+   
+  };
 
 
   //formats the phone number to have spaces 

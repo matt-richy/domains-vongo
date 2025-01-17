@@ -13,6 +13,7 @@ import NotifyPage from './NotifyPage';
 import ScrollToTop from "./ScrollToTop";
 
 
+
 export default function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="return_url" element={< ReturnPage />} />
         <Route path="cancel_url" element={< CancelPage />} />
         <Route path="notify_url" element={< NotifyPage />} />
+        
         </Routes>
       </CartProvider>
     </Router>

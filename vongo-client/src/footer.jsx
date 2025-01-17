@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import "./footer.css";
-import { Link } from "react-router-dom";
+
 import axios from 'axios';
 import instagram from "./photos/instagram.png"
 import twitter from "./photos/twitter.png"
+
 
 
 
@@ -75,11 +76,14 @@ const Footer = () => {
             <div className='social-media-div'>
                 <h3>FOLLOW US</h3>
                 <div className='socials-icon-div'>
+                        <a href="https://www.instagram.com/vongoflasks" 
+                            
+                            target="_blank" 
+                            rel="noopener noreferrer"> 
+                        <img className='social-icon' src={"https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png"} />
+                        </a>
                     <button className='social-button'>
-                        <img className='social-icon' src={instagram} />
-                    </button>
-                    <button className='social-button'>
-                        <img className='social-icon' src={twitter} />
+                        <img className='social-icon' src={"https://upload.wikimedia.org/wikipedia/commons/5/53/X_logo_2023_original.svg" } />
                     </button>
                 </div>
             </div>

@@ -6,10 +6,21 @@ import medFlask from "./photos/iceflowCharc.webp";
 import larFlask from "./photos/iceflowcharc2.webp";
 import larFlask2 from "./photos/iceflowcharc3.webp";
 import { useCart } from "./cartContext";
-import axios from "axios";
 import Popup from "./addCartpop";
 import { Imageswiper } from "./Imageswipe.tsx";
 import Footer from "./footer";
+import black1 from "./photos/bottles/black1.png"
+import grey1 from "./photos/bottles/grey1.png"
+import white1 from "./photos/bottles/white1.png"
+import tan1 from "./photos/bottles/tan1.png"
+import blue1 from "./photos/bottles/blue1.png"
+import lblack1 from "./photos/bottles/lblack1.png"
+import lblue1 from "./photos/bottles/lblue1.png"
+import lgrey1 from "./photos/bottles/lgrey1.png"
+
+
+
+
 
 const bottles = [
   {
@@ -19,21 +30,21 @@ const bottles = [
     colors: ["Sand", "Black", "Green", "Grey"],
     srcs: {
       medium: {
-        black: [medFlask, medFlask, medFlask],
-        tan: [medFlask, "image2", "image3"],
-        blue: [medFlask, "image2", "image3"],
-        white: [medFlask, "image2", "image3"],
-        grey: [medFlask, "image2", "image3"],
-        price: 899,
+        black: [black1],
+        tan: [tan1],
+        blue: [blue1],
+        white: [white1],
+        grey: [grey1],
+        price: 799,
         capacity: "1.9 Liters",
       },
       large: {
-        black: [medFlask, "image2", "image3"],
-        tan: [medFlask, "image2", "image3"],
-        blue: [medFlask, "image2", "image3"],
-        white: [medFlask, "image2", "image3"],
-        grey: [medFlask, "image2", "image3"],
-        price: 1150,
+        black: [lblack1],
+       
+        blue: [lblue1],
+       
+        grey: [lgrey1],
+        price: 1099,
         capacity: "3.8 Liters",
       },
     },
@@ -48,29 +59,32 @@ export default function Buy() {
  
   const { cartItems, addToCart } = useCart();
   const [togglePopup, setPopup] = useState(false);
+  const [engraving, setEngraving] =useState([]);
+
+
+
 
   const handleAddToCart = () => {
     addToCart({
-      id: 1,
+      id: Date.now(),
       name: bottleSize,
       price: bottles[0].srcs[bottleSize].price,
       src: bottles[0].srcs[bottleSize][bottleColour][0],
       colour: bottleColour,
       capacity: bottles[0].srcs[bottleSize].capacity,
       quantity: useQuant,
+      engraving: engraving,
+      
     });
     togglePop();
-    axios.post('/api/test', { message: "test" })
-            .then((res) => {
-                console.log("sucesss")
-            })
-            .catch((error) => {
-                console.error('Error posting data:', error);
-               
-            });
+  
   };
   const togglePop = () => {
     setPopup(!togglePopup);
+  };
+
+  const getAvailableColors = (size) => {
+    return Object.keys(bottles[0].srcs[size]); // Gets color keys based on size
   };
 
 
@@ -87,7 +101,19 @@ export default function Buy() {
   
 
   const [bottleSize, setBottleSize] = useState("medium");
-  const [bottleColour, setBottleColour] = useState("white");
+  const [bottleColour, setBottleColour] = useState("black");
+  const [clicked, setClicked] = useState(true);
+  
+
+  useEffect(() => {
+    setEngraving(new Array(useQuant).fill(""));
+  }, [useQuant]);
+  
+  const handleEngravingChange = (index, value) => {
+    const updatedEngravings = [...engraving];
+    updatedEngravings[index] = value;
+    setEngraving(updatedEngravings);
+  };
 
 
   //gets the size of the bottle based on the home page - if pressed medium or large from home page 
@@ -105,16 +131,32 @@ export default function Buy() {
 
   }, [location.search]);
   
-
-  const [clicked, setClicked] = useState(true);
-
   const handleClick = () => {
-     console.log("clicked");
     setClicked(!clicked);
     if (clicked) setBottleSize("large");
     else setBottleSize("medium");
+    // Reset color to the first available color for the selected size
+    const availableColors = getAvailableColors(clicked ? "large" : "medium");
+    setBottleColour(availableColors[0]);
   };
 
+
+  const engravingTotal = (item) => {
+    const pricePerEngraving = 100;
+    let totalEngravingPrice = 0;
+  
+    // Loop through each engraving in the array
+    for (const engraving of item) {
+      if (engraving && engraving.trim() !== "") {
+        // Add to total price if engraving text is not empty
+        totalEngravingPrice += pricePerEngraving;
+        
+      }
+    }
+
+    return totalEngravingPrice;
+    
+  };
 
   const style = {
     opacity: 0.9,
@@ -130,60 +172,6 @@ export default function Buy() {
 
 
 
-
-  //colour 1 = white
-  //colour 2 = Tan
-  //colour 3 = blue
-  //colour 4= black
-  //colour 5 = grey
-  const [colourClicked1, setColour1] = useState(true);
-  const [colourClicked2, setColour2] = useState(false);
-  const [colourClicked3, setColour3] = useState(false);
-  const [colourClicked4, setColour4] = useState(false);
-  const [colourClicked5, setColour5] = useState(false);
-
-  function handleColour1() {
-    setColour1(true);
-    setColour2(false);
-    setColour3(false);
-    setColour4(false);
-    setColour5(false);
-    setBottleColour("white");
-  }
-  function handleColour2() {
-    setColour2(true);
-    setColour1(false);
-    setColour3(false);
-    setColour4(false);
-    setColour5(false);
-    setBottleColour("tan");
-  }
-  function handleColour3() {
-    setColour3(true);
-    setColour1(false);
-    setColour2(false);
-    setColour4(false);
-    setColour5(false);
-    setBottleColour("blue");
-  }
-  function handleColour4() {
-    setColour4(true);
-    setColour1(false);
-    setColour2(false);
-    setColour3(false);
-    setColour5(false);
-    setBottleColour("black");
-  }
-  function handleColour5() {
-    setColour4(false);
-    setColour1(false);
-    setColour2(false);
-    setColour3(false);
-    setColour5(true);
-    setBottleColour("grey");
-  }
-
-
   return (
     <div>
       {bottles.map((items) => (
@@ -196,6 +184,7 @@ export default function Buy() {
           </div>
           <div>
             <div className="spacer-below-swiper"> </div>
+           
             <div className="medium-large-div">
               <button
                 className={
@@ -218,38 +207,52 @@ export default function Buy() {
                 3.8l
               </button>
             </div>
+           
             <div className="colour-palet">
+            {getAvailableColors(bottleSize).includes("white") && (
               <button
                 className="colour1"
-                style={colourClicked1 ? selectedStyle : style}
-                onClick={handleColour1}
+                style={bottleColour === "white" ? selectedStyle : style}
+                onClick={() => setBottleColour("white")}
               ></button>
+            )}
+            {getAvailableColors(bottleSize).includes("tan") && (
               <button
                 className="colour2"
-                style={colourClicked2 ? selectedStyle : style}
-                onClick={handleColour2}
+                style={bottleColour === "tan" ? selectedStyle : style}
+                onClick={() => setBottleColour("tan")}
               ></button>
+            )}
+            {getAvailableColors(bottleSize).includes("blue") && (
               <button
                 className="colour3"
-                style={colourClicked3 ? selectedStyle : style}
-                onClick={handleColour3}
+                style={bottleColour === "blue" ? selectedStyle : style}
+                onClick={() => setBottleColour("blue")}
               ></button>
+            )}
+            {getAvailableColors(bottleSize).includes("black") && (
               <button
                 className="colour4"
-                style={colourClicked4 ? selectedStyle : style}
-                onClick={handleColour4}
+                style={bottleColour === "black" ? selectedStyle : style}
+                onClick={() => setBottleColour("black")}
               ></button>
+            )}
+            {getAvailableColors(bottleSize).includes("grey") && (
               <button
                 className="colour5"
-                style={colourClicked5 ? selectedStyle : style}
-                onClick={handleColour5}
+                style={bottleColour === "grey" ? selectedStyle : style}
+                onClick={() => setBottleColour("grey")}
               ></button>
+            )}
             </div>
+            <div>
+              <h2 className="top-price-heading"> R{items.srcs[bottleSize].price} </h2>
+           </div>
             <div className="item-description">
               <p1>{items.description}</p1>
             </div>
             <div className="quantity-price">
-              <div className="total-price">
+              <div className="colour-description-div">
                 <h2 className="price-text">Colour:  </h2>
                 <h2 className="price-text">{bottleColour} </h2>
               </div>
@@ -264,10 +267,43 @@ export default function Buy() {
                   +
                 </button>
               </div>
-              <div className="total-price">
-                <h2 className="price-text">Price:</h2>
-                <h2 className="price-text"> R{useQuant * items.srcs[bottleSize].price}</h2>
+               
+              <div className="engraving-field-div">
+              <h2 className="price-text">Engraving (optional - R100):</h2>
+              {Array.from({ length: useQuant }).map((_, index) => (
+              <div key={index} className="engraving-input-div">
+               <label className="engraving-label" htmlFor={`engraving-${index}`}>
+              Bottle {index + 1}:
+              </label>
+             <input
+             className="engraving-input"
+             id={`engraving-${index}`}
+             type="text"
+           value={engraving[index] || ""}
+             onChange={(e) => handleEngravingChange(index, e.target.value)}
+           placeholder="Enter engraving text"
+      />
+    </div>
+  ))}
+            </div>
+
+              
+
+            <div className="total-price-div">
+              <div className="bottle-price-div">
+                <h2 className="price-text">Bottle Price:</h2>
+                <h2 className="price-text">  R{useQuant * items.srcs[bottleSize].price}</h2>
               </div>
+              <div className="engraving-price-div" >
+                <h2 className="price-text">Engraving:  </h2>
+                <h2 className="price-text">  R{engravingTotal(engraving)}</h2>
+              </div>
+              <div className="totalofprice-div" >
+                <h2 className="total-text">Total  </h2>
+                <h2 className="total-text">  R{useQuant * items.srcs[bottleSize].price + (engravingTotal(engraving))}</h2>
+              </div>
+
+              </div> 
               <div className="snowflake">
               <h1>&#10052;</h1>
 
@@ -293,6 +329,7 @@ export default function Buy() {
                   price={items.srcs[bottleSize].price}
                   colour={bottleColour}
                   qty = {useQuant}
+                  engraving = {engraving}
                 />
               ) : (
                 ""

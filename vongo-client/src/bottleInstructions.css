@@ -1,0 +1,58 @@
+
+.bottle-instructions {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 10px;
+    margin-bottom: 50px;
+   
+}
+
+.care-instructions-heading {
+    font-weight: 500;
+    color: rgb(195, 154, 109);
+}
+
+.care {
+    margin:15px;
+}
+.return-policy {
+    margin: 15px;
+}
+
+p {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-weight: 300;
+    line-height: 30px;;
+    text-align: left;
+    color: rgb(195, 154, 109);
+}
+
+.cleaning-instructions {
+    font-family: sans-serif;
+    font-weight: 300;
+    line-height: 30px;;
+    text-align: left;
+} 
+
+.sub-header {
+    display:block;
+    text-align: center;
+    font-size: 24px;
+    font-family: sans-serif;
+    font-weight: 400;
+    color: rgb(195, 154, 109);
+}
+
+@media screen and (min-width: 480px) {
+    .bottle-instructions {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .care {
+        margin: 30px;
+    }
+
+    .return-policy  {
+        margin: 30px;
+    }
+}

@@ -1,7 +1,7 @@
 /* Sidebar.css */
 
 body {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
 }
 
 ul {
@@ -30,9 +30,9 @@ a {
   width: 300px;
   padding-top: 8rem;
   padding-left: 3rem;
-  background-color: rgb(243, 239, 235);
-  backdrop-filter: blur(50px); /* Apply the blur effect */
-  -webkit-backdrop-filter: blur(10px); /* For Safari support */
+  background-color: #F6F5F8;
+  backdrop-filter: blur(80px); /* Apply the blur effect */
+  -webkit-backdrop-filter: blur(70px); /* For Safari support */
 
 }
 

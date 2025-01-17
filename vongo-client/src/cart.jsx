@@ -1,17 +1,39 @@
 import React, { useState } from "react";
 import { useCart } from "./cartContext";
 import "./cart.css";
-import bin from "./photos/recycle-bin.png";
 import Emptycart from "./emptycart";
 import ContactForm from "./infoForm";
 import Footer from "./footer";
 import dropdown from "./photos/down-arrow-2.png"
 
 const Cart = () => {
-  const { cartItems, removeFromCart, updateCartQuantity } = useCart(); // Assuming updateCartQuantity is a function that updates the quantity in the cart context
+  const { cartItems, removeFromCart, updateCartQuantity, totPrice } = useCart(); // Assuming updateCartQuantity is a function that updates the quantity in the cart context
 
   // Calculate the total price
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+ 
+
+
+  const calculateTotalEngravingCost = (cartItems) => {
+    const engravingCostPerItem = 100; // Cost per engraving
+    let totalEngravingCost = 0; // Initialize total cost
+  
+    // Loop through each cart item
+    cartItems.forEach((item) => {
+      if (item.engraving && Array.isArray(item.engraving)) {
+        // Loop through the engraving array for the current item
+        item.engraving.forEach((engravingText) => {
+          if (engravingText.trim() !== "") {
+            // Add cost for non-blank engravings
+            totalEngravingCost += engravingCostPerItem;
+          }
+        });
+      }
+    });
+  
+    return totalEngravingCost; // Return the total engraving cost
+  };
+
+  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) + calculateTotalEngravingCost(cartItems);
 
   const handleQuantityChange = (event, itemId) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -37,14 +59,24 @@ const Cart = () => {
               </div>
               <div className="bottle-cart-info">
                 <div className="item-header">
-                  <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
+                  <h1 className="item-header-head">Vongo Flask - {item.capacity} (R{item.price})</h1>
                 </div>
-
+              <div className="vongo-flask-details"> 
                 <h3 className="cart-item-text">
                   COLOUR: {item.colour}
                   <br />
                   
                 </h3>
+                <div>
+                  <h3 className="cart-engraving-header">Engraving</h3>
+                  {item.engraving.map((text, index) => (
+                    <li key={index} className="engraving-item-cart">
+                    Bottle {index + 1}: {text || "None"}
+                  </li>
+                  ))}
+                </div>
+                </div>
+
                 <div className="dropdown-selector-div"> 
                 <select
                   className="qty-selector"
@@ -79,7 +111,8 @@ const Cart = () => {
 
           {cartItems.length > 0 && (
             <div className="total">
-              <div className="shipping-price">
+
+            <div className="shipping-price">
                 <div>
                   <h2 className="shipping-price-text">Shipping</h2>
                 </div>
@@ -88,11 +121,19 @@ const Cart = () => {
                 </div>
               </div>
               <div className="shipping-price">
-                <h2 className="shipping-price-text-t">Total</h2>
+              <h2 className="shipping-price-text">Engraving {}</h2>
+              <div>
+              <h2 className="shipping-price-text"> + R{calculateTotalEngravingCost(cartItems)}</h2>
+              </div>
+              </div>
+          
+              <div className="shipping-price">
+                <h2 className="shipping-price-text-t">Total </h2>
                 <div>
-                  <h2 className="shipping-price-text-t">R{totalPrice}</h2>
+                  <h2 className="shipping-price-text-t">R{totPrice}</h2>
                 </div>
               </div>
+             
             </div>
           )}
         </div>

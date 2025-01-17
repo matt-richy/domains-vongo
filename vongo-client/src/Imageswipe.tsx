@@ -3,8 +3,29 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { wrap } from "popmotion";
 import medFlask from "./photos/iceflowCharc.webp";
-import larFlask from "./photos/iceflowcharc2.webp";
-import larFlask2 from "./photos/iceflowcharc3.webp";
+import black1 from "./photos/bottles/black1.png"
+import black2 from "./photos/bottles/black2.png"
+import black3 from "./photos/bottles/black3.png"
+import grey1 from "./photos/bottles/grey1.png"
+import grey2 from "./photos/bottles/grey2.png"
+import grey3 from "./photos/bottles/grey3.png"
+import white1 from "./photos/bottles/white1.png"
+import white2 from "./photos/bottles/white2.png"
+import tan1 from "./photos/bottles/tan1.png"
+import tan2 from "./photos/bottles/tan2.png"
+import tan3 from "./photos/bottles/tan3.png"
+import blue1 from "./photos/bottles/blue1.png"
+import blue2 from "./photos/bottles/blue2.png"
+import blue3 from "./photos/bottles/blue3.png"
+import lid1 from "./photos/bottles/lid1.png"
+import lid2 from "./photos/bottles/lid2.png"
+import lblack1 from "./photos/bottles/lblack1.png"
+import lblack2 from "./photos/bottles/lblack2.png"
+import lblue1 from "./photos/bottles/lblue1.png"
+import lblue2 from "./photos/bottles/lblue2.png"
+import lgrey1 from "./photos/bottles/lgrey1.png"
+import lgrey2 from "./photos/bottles/lgrey2.png"
+
 
 interface ImageSwiperProps {
   size: string;
@@ -14,20 +35,20 @@ interface ImageSwiperProps {
 const images = [
   {
     medium: {
-      black: [medFlask, medFlask, medFlask],
-      tan: [medFlask, larFlask, larFlask2],
-      blue: [medFlask, larFlask, larFlask2],
-      white: [medFlask, larFlask, larFlask2],
-      grey: [medFlask, larFlask, larFlask2], 
+      black: [black1, black2, black3, lid1, lid2],
+      tan: [tan1, tan2, tan3 , lid1, lid2],
+      blue: [blue1, blue2, blue3 , lid1, lid2],
+      white: [white1, white2, lid1, lid2],
+      grey: [grey1, grey2, grey3, lid1, lid2, ],  
       price: 899,
       capacity: "1.9 Liters",
     },
     large: {
-      black: [medFlask, larFlask, larFlask2],
-      tan: [medFlask, larFlask, larFlask2],
-      blue: [medFlask, larFlask, larFlask2],
-      white: [medFlask, larFlask, larFlask2],
-      grey: [medFlask, larFlask, larFlask2], 
+      black: [lblack1,lblack2, lid1, lid2 ],
+      tan: [],
+      blue: [lblue1, lblue2, lid1, lid2],
+      white: [],
+      grey: [ lgrey1, lgrey2 , lid1, lid2], 
       price: 1150,
       capacity: "3.8 Liters",
     },
@@ -102,7 +123,9 @@ export const Imageswiper: React.FC<ImageSwiperProps> = (props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%",
+            height: "400px",
+            width: "auto",
+            
           }}
           key={page}
           src={images[0][props.size][props.colour][imageIndex]}

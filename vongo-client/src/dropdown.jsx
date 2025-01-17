@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import "./dropdown.css";
 import bag from "./photos/bag.png";
 
+
 //passes onCloseSideBar to the parent component when one of the links is pressed and then it hides the sidebar
 const Sidebar = ({ onCloseSideBar }) => {
   const sidebarRef = useRef(null);
@@ -44,7 +45,18 @@ const Sidebar = ({ onCloseSideBar }) => {
           <Link to="/Cart" onClick={handleLinkClick}>
             <img className="cart-icon" src={bag} />
           </Link>
-        </li>
+          </li>
+          <li><Link to="return_url" onClick={handleLinkClick}> 
+            Return
+          </Link>  </li>
+          <li> 
+            <Link to="cancel_url" onClick={handleLinkClick}>
+              Cancel
+            </Link>
+
+          </li>
+
+        
       </ul>
     </div>
   );

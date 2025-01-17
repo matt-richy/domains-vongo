@@ -32,6 +32,15 @@ const userSchema = new Schema({
     colour: String,
     quantity: Number
   }],
+  orderNumber: {
+    type: String, 
+    required: true
+  }, 
+  paymentSuccessful: {
+    type: Boolean, 
+    required: false, 
+    default: false
+  }
   // Other fields...
 });
 

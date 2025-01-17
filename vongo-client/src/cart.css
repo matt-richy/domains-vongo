@@ -2,8 +2,7 @@
   .cart-grid {
     display: grid;
     grid-template-columns: 1fr;
-    margin: 2rem;
-    gap: 3rem;
+ 
   }
   .cart-info {
     
@@ -11,7 +10,7 @@
   }
 }
 h4 {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
 }
 
 .cart-heading-h1 {
@@ -24,12 +23,12 @@ body {
 }
 
 .cart-item-text {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
   font-weight: 300;
   line-height: 30px
 }
 h3, h1 {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
   font-weight: 300;
   line-height: 30px
 }
@@ -43,7 +42,7 @@ h3, h1 {
 
 .cart-grid {
   padding: 0.4rem;
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
 
 }
 
@@ -60,16 +59,37 @@ h3, h1 {
   display: flex;
   gap: 1rem;
   padding-bottom: 1rem;
-  height: 250px;
-  width:250px;
+  
   margin-left:0 ;
  
 }
+
+
+.cart-engraving-header {
+  font-family: "Helvetica Neue", Arial,sans-serif;
+
+}
+
+.engraving-item-cart {
+  list-style: none;
+  margin-top: 15px;
+  color: #848383;
+  padding-bottom: 5px;
+
+}
+
 .dropdown-selector-div {
   display: inline-block;
   align-items: center;
   position: relative;
   height: 30px;
+  margin-top: 15px;
+}
+
+.vongo-flask-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .qty-selector {
@@ -103,14 +123,17 @@ h3, h1 {
 
 
 .bottle-cart-info {
-  
-  height: 100%;
-  
-}
-.item-header {
   display: flex;
-  flex-basis: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  width: 100%;
 }
+
+.bottle-cart-info > div:last-child {
+  margin-left: auto;
+}
+
 .item-header-head {
   margin:0;
   font-size: 26px;
@@ -145,7 +168,7 @@ h3, h1 {
 }
 
 .image-in-cart {
-  width: 100%;
+  width: 200px;
 }
 @media  screen and (min-width: 480px) {
 
@@ -155,13 +178,23 @@ h3, h1 {
 
   .cart-items-grid {
     grid-template-columns: 300px 1fr 1fr;
-    padding: 40px;
+    
   }
   
   .bottle-cart-info {
     min-width: 400px;
     margin-left: 20px;
+    justify-content: space-around;
+    padding-top: 40px;
+    padding-bottom:40px;
   }
+
+  .bottle-cart-info > div:last-child {
+    margin-left: 0;
+  }
+
+
+
   .individual-item-price {
     font-size: 32px;
   }
@@ -171,11 +204,9 @@ h3, h1 {
 
 @media screen and (min-width: 480px) {
   .image-in-cart {
-    width:100%;
+    width: 180px;
   }
-  .items-in-cart {
-    margin-left:2rem;
-  }
+ 
 }
 
 
@@ -186,7 +217,7 @@ h3, h1 {
   margin-top: 50px;
 }
 .cart-item-text {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
   line-height: 200%;
 }
 
@@ -208,8 +239,10 @@ h3, h1 {
   align-items: center;
 }
 
+
+
 .shipping-price-text {
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", Arial,sans-serif;
   font-weight: 300;
 }
 .shipping-price-text-t {
@@ -230,7 +263,7 @@ h3, h1 {
 
 @media screen and (min-width: 480px) {
   .total {
-    margin-right:80px;
+    margin-right:20px;
   }
   .shipping-price {
     width: 400px;

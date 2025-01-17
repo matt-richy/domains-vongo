@@ -3,20 +3,75 @@
 }
 
 
+
 .general-details {
     display: flex;
     padding: 20px;
     text-align: left;
     justify-content: center;
+    margin-bottom: 70px;
 }
 
 .general-details-text {
     font-size: 20px;
-    font-family: sans-serif;
+    font-family: "Helvetica Neue", Arial, sans-serif;
     font-weight: 300;
+    color: black;
 }
+
+
+.payment-success-div {
+    display: block;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 80px;
+}
+
+
+
 
 .button-div {
     display: flex;
     justify-content: center;
 }
+
+.payment-heading {
+    font-weight: 400;
+    margin-bottom: 50px;
+}
+
+
+.pi-text {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 20px;
+    line-height: 30px;
+    
+}
+
+
+
+
+.try-again-button-div {
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}
+.try-again-button {
+    width: 120px;
+  height: 50px;
+  font-size: 22px;
+  font-weight: 330;
+  cursor: pointer;
+  border-radius: 980px;
+  border: none;
+  background-color: #dc7a53;
+  color: #0d172a;
+}
+
+
+
+
+
+
+
+
