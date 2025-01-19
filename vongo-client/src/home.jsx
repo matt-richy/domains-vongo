@@ -78,7 +78,7 @@ const Homepage = () => {
           </div>
         </div>
         <div>
-          <MediaSlider media={media}/>
+         
         </div>
 
        
