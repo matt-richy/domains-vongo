@@ -46,15 +46,7 @@ const Sidebar = ({ onCloseSideBar }) => {
             <img className="cart-icon" src={bag} />
           </Link>
           </li>
-          <li><Link to="return_url" onClick={handleLinkClick}> 
-            Return
-          </Link>  </li>
-          <li> 
-            <Link to="cancel_url" onClick={handleLinkClick}>
-              Cancel
-            </Link>
-
-          </li>
+         
 
         
       </ul>
