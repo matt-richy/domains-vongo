@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from "react-intersection-observer";
+import { useInView } from 'react-intersection-observer';
 
 const MediaSlider = ({ media }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -70,7 +70,7 @@ const MediaSlider = ({ media }) => {
 
   return (
     <motion.div
-      ref={ref}
+      ref={ref || null}
       style={isMobile ? mobileStyles.sliderContainer : styles.sliderContainer}
       initial="fullWidth"
       animate={inView ? "reducedWidth" : "fullWidth"}
