@@ -6,9 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 import BottleInstructions from './bottleInstructions';
 
 const ReturnPage = () => {
-  const { cartItems, removeFromCart, updateCartQuantity } = useCart()
+  const { cartItems, } = useCart()
 
   const navigate = useNavigate();
+
+  const storedOrderNumber = localStorage.getItem('orderNumber');
 
 const handleClick = () => {
   navigate('/')
@@ -17,7 +19,7 @@ const handleClick = () => {
   return (
     <div className='main-div'>
       <div className='payment-success-div'> 
-      <h1 className='payment-heading'>Payment Successful</h1>
+      <h1 className='payment-heading'>Payment Successful - order {storedOrderNumber}</h1>
       <p1 className="pi-text" >We received your payment! <br /> <br />
       Thanks for shopping local! Please watch out for an email detailing your order and delivery details.
       </p1>
@@ -43,6 +45,14 @@ const handleClick = () => {
                 </h3>
                
               </div>
+              <div>
+                  <h3 className="cart-engraving-header">Engraving</h3>
+                  {item.engraving.map((text, index) => (
+                    <li key={index} className="engraving-item-cart">
+                    Bottle {index + 1}: {text || "None"}
+                  </li>
+                  ))}
+                </div>
              
             </div>
           ))}

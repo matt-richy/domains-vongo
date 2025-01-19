@@ -107,15 +107,33 @@ const addressInputRef = useRef(null);
     e.preventDefault();
   
     // Prepare cart data from cartItems
-    const cartUser = cartItems.map(({ price, colour, quantity, capacity }) => ({
-      capacity,
-      price,
-      colour,
-      quantity,
-    }));
+    const cartUser = cartItems.map(({ price, colour, quantity, capacity, engraving,  }) => {
+      // If engraving is a string, parse it into an array
+      let parsedEngraving = engraving;
+    
+      if (typeof engraving === 'string') {
+        try {
+          // Replace single quotes with double quotes and parse it into an array
+          parsedEngraving = JSON.parse(engraving.replace(/'/g, '"'));
+        } catch (error) {
+          console.error("Error parsing engraving:", error);
+          parsedEngraving = []; // Fallback to an empty array if parsing fails
+        }
+      }
+    
+      // Return the prepared data with the correct engraving format
+      return {
+        capacity,
+        price,
+        colour,
+        quantity,
+        engraving: parsedEngraving,
+      };
+    });
   
     // Combine form data and cart items into a single object
     const newOrder = { ...formData, cart: cartUser, };
+    
   
     // Calculate total price
     let totalPrice = 0;
@@ -129,8 +147,9 @@ const addressInputRef = useRef(null);
     // Fetch the order number before proceeding
     let orderNumber;
     try {
-      const response = await getOrderNum(formData, totalPrice); // Fetch order number from backend
+      const response = await getOrderNum(formData, totPrice); // Fetch order number from backend
       orderNumber = response.orderNumber;   // Adjusted to access order number correctly
+      localStorage.setItem('orderNumber', orderNumber);
       console.log("Order Number:", orderNumber);
     } catch (error) {
       console.error("Error fetching order number:", error);
@@ -153,7 +172,7 @@ const addressInputRef = useRef(null);
         name_first: formData.name,
         name_last: formData.surname,
         email_address: formData.email,
-        amount: totalPrice.toFixed(2),
+        amount: totPrice.toFixed(2),
         cell_number: paymentNumber(formData.number),
         order_number: orderNumber, // Use fetched order number
       });

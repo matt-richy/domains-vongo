@@ -30,8 +30,10 @@ const userSchema = new Schema({
     capacity: String,
     price: Number,
     colour: String,
-    quantity: Number
+    quantity: Number,
+    engraving: [String],
   }],
+ 
   orderNumber: {
     type: String, 
     required: true

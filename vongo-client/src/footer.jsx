@@ -67,8 +67,8 @@ const Footer = () => {
                 <h3>CONTACT US</h3>
 
                 <ul className='contact-list'>
-                    <li className='contact-list-item'>+27 71 613 8265</li>
-                    <li className='contact-list-item'>info@vongo.co.za</li>
+                    
+                <a className="mail-text" href="mailto:info@vongo.co.za">info@vongo.co.za</a>
                 </ul>
                 
 
