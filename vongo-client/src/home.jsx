@@ -4,7 +4,6 @@ import { motion, useInView} from "framer-motion";
 import "animate.css/animate.min.css";
 import Footer from "./footer";
 import { useNavigate } from "react-router-dom";
-import headImg from "./photos/headimag.png";
 import allsmallimg from "./photos/bottles/allsmallimg.png";
 import testbuy from "./photos/bottles/testbuy.png";
 import featurecards1 from "./photos/bottles/featurecards1.png";
@@ -40,14 +39,7 @@ const Homepage = () => {
 
   const navigate = useNavigate();
 
-  const targetRef = useRef(null);
-  const inVieww = useInView(targetRef, {  amount: 1 });
 
-  const targetRef2 = useRef(null);
-  const inVieww2 = useInView(targetRef2, {  amount: 1 });
-
-  const targetRefthree = useRef(null);
-  const inVieww3 = useInView(targetRefthree, { once: true, amount: 1 });
 
   const handleBuyClick = (size) => {
     navigate(`/Purchase?size=${size}`);
@@ -57,11 +49,6 @@ const Homepage = () => {
     navigate("/Purchase");
   };
 
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "0px 0px -50px 0px" });
-
-  const card2 = useRef(null);
-  const inView2 = useInView(card2, { once: true, margin: "0px 0px -50px 0px" });
 
   const textRef = useRef(null);
   const isTextInView = useInView(textRef, { amount: 0.7, });
