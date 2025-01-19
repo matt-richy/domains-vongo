@@ -12,6 +12,8 @@ const MediaSlider = ({ media }) => {
     threshold: 0.8,
   });
 
+  
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 490); // Set breakpoint for mobile
