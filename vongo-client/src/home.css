@@ -842,6 +842,13 @@ html {
   text-align: left;
   height: 1100px;
 }
+
+.button-next:focus {
+  outline:none;
+
+}
+
+
 .main-text-header {
   font-family: "Helvetica Neue", Arial, sans-serif;
   font-weight: 500;

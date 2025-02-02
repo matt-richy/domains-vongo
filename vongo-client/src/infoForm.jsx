@@ -24,48 +24,6 @@ const ContactForm = () => {
   });
 
 
-  const autocompleteRef = useRef(null);
-const addressInputRef = useRef(null);
-
-
-  useEffect(() => {
-    if (!window.google || !window.google.maps || !window.google.maps.places) {
-      console.warn("Google Maps API not available.");
-      return;
-    }
-  
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      addressInputRef.current,
-      { types: ["address"] }
-    );
-  
-    autocomplete.addListener("place_changed", () => {
-      const place = autocomplete.getPlace();
-      const address = place.formatted_address || "";
-      const city = place.address_components?.find(component =>
-        component.types.includes("locality")
-      )?.long_name || "";
-      const zipCode = place.address_components?.find(component =>
-        component.types.includes("postal_code")
-      )?.long_name || "";
-  
-      setFormData((prevData) => ({
-        ...prevData,
-        address,
-        city,
-        zipCode,
-      }));
-    });
-  
-    autocompleteRef.current = autocomplete;
-  
-    return () => {
-      // Cleanup to avoid memory leaks
-      if (autocomplete) {
-        window.google.maps.event.clearInstanceListeners(autocomplete);
-      }
-    };
-  }, []);
 
 
   const [htmlForm, setHtmlForm] = useState(null);
@@ -271,7 +229,6 @@ const addressInputRef = useRef(null);
           name="address"
           value={formData.address}
           onChange={handleChange}
-          ref={addressInputRef}
           required
           className="input-form"
         />

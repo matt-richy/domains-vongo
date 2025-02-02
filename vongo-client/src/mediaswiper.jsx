@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useInView } from 'react-intersection-observer';
+import { useInView } from "react-intersection-observer";
+
+import debounce from "lodash.debounce";
 
 const MediaSlider = ({ media }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,31 +11,39 @@ const MediaSlider = ({ media }) => {
   // Intersection Observer to detect when the slider is in view
   const { ref, inView } = useInView({
     triggerOnce: false,
-    threshold: 0.8,
+    threshold: 0.7,
   });
 
-  
-
+  // UseEffect to handle resize logic with debounce
   useEffect(() => {
-    const handleResize = () => {
+    const handleResize = debounce(() => {
       setIsMobile(window.innerWidth <= 490); // Set breakpoint for mobile
-    };
+    }, 200); // Delay of 200ms
 
     handleResize(); // Check initial state
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
 
+
+  // Handle Next and Previous media
   const handleNext = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % media.length);
   };
+
+
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? media.length - 1 : prevIndex - 1
     );
   };
+
+  
 
   const containerVariants = {
     fullWidth: {
@@ -61,6 +71,7 @@ const MediaSlider = ({ media }) => {
     }),
   };
 
+  // Dynamically choose media based on screen size (mobile or desktop)
   const currentMedia = isMobile
     ? media[currentIndex].mobileSrc // Use mobile-specific source
     : media[currentIndex].desktopSrc; // Use desktop-specific source
@@ -68,27 +79,29 @@ const MediaSlider = ({ media }) => {
   const currentMediaType = media[currentIndex].type; // Get the media type (image or video)
 
 
- 
+
 
   return (
     <motion.div
-      ref={ref || null}
-      style={isMobile ? mobileStyles.sliderContainer : styles.sliderContainer}
-      initial="fullWidth"
-      animate={inView ? "reducedWidth" : "fullWidth"}
-      variants={containerVariants}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-    >
+    ref={ref} // Ensure ref is properly set
+    style={isMobile ? mobileStyles.sliderContainer : styles.sliderContainer}
+    initial="fullWidth"
+    animate={inView ? "reducedWidth" : "fullWidth"}
+    variants={containerVariants}
+    transition={{ duration: 0.8, ease: "easeInOut" }}
+  >
       {/* Media container */}
       <div style={styles.mediaContainer}>
         {/* Navigation Arrows */}
-        <button style={{ ...styles.arrowButton, left: "10px" }} onClick={handlePrev}>
+        <button
+          style={{ ...styles.arrowButton, left: "10px" }}
+          onClick={handlePrev}
+        >
           &lt;
         </button>
 
         <AnimatePresence custom={1}>
           <motion.div
-            
             custom={1}
             variants={mediaVariants}
             initial="enter"
@@ -116,7 +129,11 @@ const MediaSlider = ({ media }) => {
           </motion.div>
         </AnimatePresence>
 
-        <button style={{ ...styles.arrowButton, right: "10px" }} onClick={handleNext}>
+        <button
+          className="button-next"
+          style={{ ...styles.arrowButton, right: "10px" }}
+          onClick={handleNext}
+        >
           &gt;
         </button>
       </div>
@@ -124,35 +141,33 @@ const MediaSlider = ({ media }) => {
   );
 };
 
-// Styling
+// Styling for mobile view
 const mobileStyles = {
-    sliderContainer: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height:  "75vh",
-        width: "100%",
-        overflow: "hidden",
-        position: "relative",
-        boxSizing: "border-box",
-        marginTop: "80px",
-       
-      },
-}
-
-
-const styles = {
   sliderContainer: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height:  "106vh",
+    height: "75vh",
     width: "100%",
     overflow: "hidden",
     position: "relative",
     boxSizing: "border-box",
     marginTop: "80px",
-   
+  },
+};
+
+// General styling
+const styles = {
+  sliderContainer: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "106vh",
+    width: "100%",
+    overflow: "hidden",
+    position: "relative",
+    boxSizing: "border-box",
+    marginTop: "80px",
   },
   arrowButton: {
     position: "absolute",
@@ -191,7 +206,6 @@ const styles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-  
   },
   media: {
     maxWidth: "100%",
