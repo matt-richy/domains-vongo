@@ -1,6 +1,7 @@
 import { React, useRef } from "react";
 import "./home.css";
 import { motion, useInView } from "framer-motion";
+import { Helmet } from "react-helmet";
 import "animate.css/animate.min.css";
 import Footer from "./footer";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +19,8 @@ import media1mobile from "./photos/bottles/media1mobile.jpg";
 import media2mobile from "./photos/bottles/media2mobile.jpg";
 
 const Homepage = () => {
+
+
   const media = [
     {
       id: 1,
@@ -53,6 +56,12 @@ const Homepage = () => {
 
   return (
     <>
+    <Helmet>
+        <link rel="preload" href={media1} as="image" />
+        <link rel="preload" href={media2} as="image" />
+        <link rel="preload" href={media1mobile} as="image" />
+        <link rel="preload" href={media2mobile} as="image" />
+      </Helmet>
       <div className="first-thing-div">
         <div className="main-heading-div">
           <div className="top-text-div">

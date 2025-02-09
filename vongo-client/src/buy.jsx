@@ -35,7 +35,7 @@ const bottles = [
         blue: [blue1],
         white: [white1],
         grey: [grey1],
-        price: 799,
+        price: 850,
         capacity: "1.9 Liters",
       },
       large: {
@@ -44,7 +44,7 @@ const bottles = [
         blue: [lblue1],
        
         grey: [lgrey1],
-        price: 1099,
+        price: 1150,
         capacity: "3.8 Liters",
       },
     },
