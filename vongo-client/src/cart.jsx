@@ -121,7 +121,7 @@ const Cart = () => {
                 </div>
               </div>
               <div className="shipping-price">
-              <h2 className="shipping-price-text">Engraving {}</h2>
+              <h2 className="shipping-price-text">Engraving (coming soon) {}</h2>
               <div>
               <h2 className="shipping-price-text"> + R{calculateTotalEngravingCost(cartItems)}</h2>
               </div>

@@ -176,7 +176,7 @@ html {
 
 .feature-cards-text {
   font-family: "Helvetica Neue", Arial,sans-serif;
-  font-size: 17px;
+  font-size: 18px;
   padding: 15px;
   line-height: 25px;
   color: rgb(94, 94, 94);
@@ -310,24 +310,24 @@ html {
   display:flex;
   
   flex-direction: column;
-  height: 450vh;
+  height: 250vh;
   align-items: center;
 }
 
 .all-day-long-divs {
-  height: 150vh;
+  height: 100vh;
   display: flex;
   position: sticky;
   top: 100px;
 }
 .all-day-long-divs2 {
-  height: 120vh;
+  height: 70vh;
   display: flex;
   position: sticky;
   top: 250px;
 }
 .all-day-long-divs3 {
-  height: 90vh;
+  height: 50vh;
   display: flex;
   position: sticky;
   top: 400px;
@@ -579,8 +579,8 @@ strong {
   cursor: pointer;
   border-radius: 980px;
   border: none;
-  background-color: #dc7a53;
-  color: #0d172a;
+  background-color: #00334C;
+  color: #ffffff;
   margin-top: 50px;
   margin-bottom: 40px;
 }
@@ -593,8 +593,8 @@ strong {
   cursor: pointer;
   border-radius: 980px;
   border: none;
-  background-color: #dc7a53;
-  color: #0d172a;
+  background-color: #08405c;
+  color: white;
 }
 
 

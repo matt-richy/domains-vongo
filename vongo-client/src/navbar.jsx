@@ -4,14 +4,15 @@ import "./navbar.css";
 import Sidebar from "./dropdown";
 import bag from "./photos/bag.png";
 import { Link } from "react-router-dom";
-
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion"; // Import AnimatePresence
 
 const Navbar = () => {
   const [toggleSidebar, setSideBar] = useState(false);
 
-  const toggleNavbar = () => {
-    setSideBar(!toggleSidebar);
+  const toggleNavbar = (e) => {
+  
+    setSideBar((prevState) => !prevState);
   };
 
   return (
@@ -23,17 +24,18 @@ const Navbar = () => {
           }
           onClick={toggleNavbar}
         >
-          <img className="menu-icon" src={menu} />
+          <img className="menu-icon" src={menu} alt="Menu" />
         </button>
 
-        {toggleSidebar ? <Sidebar onCloseSideBar={toggleNavbar} /> : ""}
+        <AnimatePresence>
+          {toggleSidebar && <Sidebar onCloseSideBar={toggleNavbar} />}
+        </AnimatePresence>
+
         <Link to="/Purchase">
-          {" "}
           <h1 className="vongo-heading">VONGO</h1>
         </Link>
-
         <Link to="/Cart">
-          <img className="cart-icon" src={bag} />
+          <img className="cart-icon" src={bag} alt="Cart" />
         </Link>
       </div>
     </header>

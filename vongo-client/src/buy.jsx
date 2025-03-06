@@ -268,24 +268,7 @@ export default function Buy() {
                 </button>
               </div>
                
-              <div className="engraving-field-div">
-              <h2 className="price-text">Engraving (optional - R100):</h2>
-              {Array.from({ length: useQuant }).map((_, index) => (
-              <div key={index} className="engraving-input-div">
-               <label className="engraving-label" htmlFor={`engraving-${index}`}>
-              Bottle {index + 1}:
-              </label>
-             <input
-             className="engraving-input"
-             id={`engraving-${index}`}
-             type="text"
-           value={engraving[index] || ""}
-             onChange={(e) => handleEngravingChange(index, e.target.value)}
-           placeholder="Enter engraving text"
-      />
-    </div>
-  ))}
-            </div>
+           
 
               
 
@@ -295,7 +278,7 @@ export default function Buy() {
                 <h2 className="price-text">  R{useQuant * items.srcs[bottleSize].price}</h2>
               </div>
               <div className="engraving-price-div" >
-                <h2 className="price-text">Engraving:  </h2>
+                <h2 className="price-text">Engraving: - coming soon! </h2>
                 <h2 className="price-text">  R{engravingTotal(engraving)}</h2>
               </div>
               <div className="totalofprice-div" >

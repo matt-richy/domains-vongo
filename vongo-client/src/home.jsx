@@ -17,6 +17,7 @@ import media1 from "./photos/bottles/media1.jpg";
 import media2 from "./photos/bottles/media2.jpg";
 import media1mobile from "./photos/bottles/media1mobile.jpg";
 import media2mobile from "./photos/bottles/media2mobile.jpg";
+import CampingSection from "./useCase";
 
 const Homepage = () => {
 
@@ -57,6 +58,10 @@ const Homepage = () => {
   return (
     <>
     <Helmet>
+    <meta name="description" content="Discover Vongo's high-quality, durable, double-wall insulated flasks designed for health-conscious water drinkers. Stay hydrated in style." />
+        <meta name="author" content="Vongo" />
+        <meta name="keywords" content="Vongo, insulated flasks, double-wall, stainless steel, water bottles, durable flasks, stylish bottles, eco-friendly flasks" />
+        <title>Vongo - Premium Insulated Flasks</title>
         <link rel="preload" href={media1} as="image" />
         <link rel="preload" href={media2} as="image" />
         <link rel="preload" href={media1mobile} as="image" />
@@ -82,13 +87,13 @@ const Homepage = () => {
             </h1>
           </div>
         </div>
+      
         <div>
           <MediaSlider media={media} />
         </div>
       </div>
 
-      <div className="our-products">
-        <div className="vongo-flasks-intro">
+      <div className="vongo-flasks-intro">
           <h1 className="vongo-flasks-intro-heading">
             Introducing{" "}
             <span className="vongo-heading-vongo"> Vongo Flasks. </span>
@@ -99,6 +104,13 @@ const Homepage = () => {
             crafted from premium materials
           </p>
         </div>
+        <CampingSection />
+
+
+
+      <div className="our-products">
+        
+        
 
         <div className="products-heading-div">
           <h1 className="our-products-heading">Our Products</h1>
@@ -171,7 +183,7 @@ const Homepage = () => {
         </div>
 
         <div className="onenine-images">
-          <h1 className="onenine-images-header">All the colours</h1>
+          <h1 className="onenine-images-header">A COLOUR FOR EVERY ADVENTURE</h1>
           <img
             className="allsmall-class"
             src={allsmallimg}
@@ -189,14 +201,10 @@ const Homepage = () => {
           <div className="feature-cards">
             <h1 className="feature-cards-header">For the campers</h1>
             <p className="feature-cards-text">
-              Vongo’s 3.8L flask is the perfect companion for{" "}
-              <strong>outdoor enthusiasts </strong> and campers. With its
-              durable, <strong> double-wall insulation</strong> , it keeps
-              drinks hot or cold for hours, ensuring you stay refreshed on your
-              adventures. Its large capacity is ideal for long trips, while the{" "}
-              <strong>rugged design </strong> ensures it stands up to the
-              toughest conditions. Stay hydrated, no matter where your journey
-              takes you
+            Vongo’s <strong>3.8L</strong> flask is built for<strong> outdoor</strong>  lovers and campers.
+             Its tough, double-wall insulation keeps drinks hot or cold for hours,
+              perfect for long trips.<strong> Rugged and reliable </strong> , it ensures hydration 
+              wherever adventure calls
             </p>
             <img
               className="featureone-image"
