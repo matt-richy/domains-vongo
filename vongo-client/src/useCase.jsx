@@ -1,9 +1,17 @@
 import React from "react";
 import "./useCase.css"; 
 import wildimage from "./photos/bottles/buildforwild.jpeg";
-
+import { useNavigate } from "react-router-dom";
 
 const CampingSection = () => {
+
+  const navigate = useNavigate();
+
+  const handleBuyClick = () => {
+    navigate("/Purchase");
+  };
+
+
   return (
     <section className="camping-section">
       <div className="camping-content">
@@ -17,7 +25,7 @@ const CampingSection = () => {
           <li>Tough, premium materials – built to handle the outdoors</li>
         </ul>
         <div className="button-div">
-        <button className="cta-button">Shop Now</button>    
+        <button className="buy-now-button"  onClick={handleBuyClick} >Shop Now</button>    
          </div>
       
       </div>
