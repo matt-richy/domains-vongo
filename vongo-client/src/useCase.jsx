@@ -15,7 +15,7 @@ const CampingSection = () => {
   return (
     <section className="camping-section">
       <div className="camping-content">
-        <h2>Built for the Wild: Your Hydration Hero</h2>
+        <h2>STAY HOT, STAY COLD <br /> ALL DAY LONG.</h2>
         <p>
           Whether you’re pitching a tent by the lake or hiking deep into the woods, our 1.9-liter double-wall insulated flask keeps your water ice-cold or piping hot for hours. With rugged durability and a capacity to match your thirst, it’s the perfect companion for every campfire night and sunrise trek.
         </p>

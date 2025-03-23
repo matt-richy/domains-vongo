@@ -1,0 +1,173 @@
+/* Horizontal scrolling container */
+.hero-scroll-container {
+    display: flex;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Snaps to each section */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    scroll-behavior: smooth; /* Smooth scrolling */
+
+  }
+  
+  /* Each section (text + image) */
+  .hero-section {
+    display: flex;
+    flex: 0 0 90%; /* Slightly less than full width for spacing between cards */
+    min-height: 80vh; /* Slightly shorter to fit within viewport with margin */
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    margin: 40px 20px; /* Margin to create space between cards and edges */
+    scroll-snap-align: center; /* Center each card when scrolling */
+    background-color: #ffffff; /* White background */
+    border-radius: 28px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    position: relative; /* For positioning text over image */
+  }
+  
+  /* Text container */
+  .text-container {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
+  }
+  
+  /* Image container */
+  .image-container {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .feature-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image fills space */
+    border-top-right-radius: 28px; /* Match container's rounded corners */
+    border-bottom-right-radius: 28px; /* Match container's rounded corners */
+  }
+  
+  .hero-text {
+    font-size: 3rem; /* Large text */
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 20px;
+  }
+  
+  .hero-description {
+    font-size: 1.2rem;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  /* Specific styling for the second feature screen on desktop */
+  .hero-section.text-over-image {
+    position: relative;
+  }
+  
+  .hero-section.text-over-image .text-container {
+    position: absolute; /* Overlay on top of image */
+    top: 20px; /* Position at the top with some padding */
+    left: 0;
+    right: 0;
+    max-width: 100%; /* Full width */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Align to top */
+    align-items: center; /* Center horizontally */
+    text-align: center; /* Center text */
+
+    border-radius: 28px 28px 0 0; /* Round only top corners */
+  }
+  
+  .hero-section.text-over-image .hero-text {
+    color: #ffffff; /* White text */
+  }
+  
+  .hero-section.text-over-image .hero-description {
+    color: #ffffff; /* White text */
+  }
+  
+  .hero-section.text-over-image .image-container {
+    width: 100%; /* Full width of the card */
+    height: 100%; /* Full height of the card */
+    margin: 0;
+    padding: 0;
+  }
+  
+  .hero-section.text-over-image .feature-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+    border-radius: 28px; /* Round all corners to match the card */
+  }
+  
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .hero-scroll-container {
+      height: 75vh; /* Keep full height */
+      overflow-x: auto; /* Keep horizontal scrolling */
+      overflow-y: hidden; /* Disable vertical scroll */
+      scroll-snap-type: x mandatory; /* Keep horizontal snapping */
+    }
+  
+    .hero-section {
+      flex: 0 0 90%; /* Keep width for horizontal scrolling */
+      min-height: 70vh; /* Slightly shorter for mobile */
+      margin: 20px 10px; /* Smaller margin on mobile */
+      padding: 0;
+      position: relative; /* For text overlay */
+    }
+  
+    .text-container {
+      position: absolute; /* Overlay on top of image */
+      top: 20px; /* Position at the top with some padding */
+      left: 0;
+      right: 0;
+      max-width: 100%; /* Full width */
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start; /* Align to top */
+      align-items: center; /* Center horizontally */
+      text-align: center; /* Center text */
+
+      border-radius: 28px 28px 0 0; /* Round only top corners */
+    }
+  
+    .hero-text {
+      font-size: 32px; /* Smaller text on mobile */
+      color: #ffffff; /* White text */
+    }
+  
+    .hero-description {
+      font-size: 18px; /* Smaller description text */
+      color: #ffffff; /* White text */
+    }
+  
+    .image-container {
+      width: 100%; /* Full width of the card */
+      height: 100%; /* Full height of the card */
+      margin: 0;
+      padding: 0;
+    }
+  
+    .feature-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin: 0;
+      padding: 0;
+      border-radius: 28px; /* Round all corners to match the card */
+    }
+  }

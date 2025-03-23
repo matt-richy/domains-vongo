@@ -181,6 +181,7 @@ const styles = {
     zIndex: 10,
     padding: "10px 15px",
     borderRadius: "50%",
+
   },
   mediaContainer: {
     width: "100%",

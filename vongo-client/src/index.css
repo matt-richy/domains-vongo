@@ -5,6 +5,12 @@ body {
   
 }
 
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent; /* For iOS/Safari */
+  tap-highlight-color: transparent; /* For Android/Chrome */
+  outline: none; /* Removes focus outline if present */
+}
+
 
 .images {
   height: 450px;

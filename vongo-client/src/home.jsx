@@ -18,6 +18,7 @@ import media2 from "./photos/bottles/media2.jpg";
 import media1mobile from "./photos/bottles/media1mobile.jpg";
 import media2mobile from "./photos/bottles/media2mobile.jpg";
 import CampingSection from "./useCase";
+import HeroSection from "./herosection";
 
 const Homepage = () => {
 
@@ -87,10 +88,10 @@ const Homepage = () => {
             </h1>
           </div>
         </div>
+
+        <HeroSection />
       
-        <div>
-          <MediaSlider media={media} />
-        </div>
+       
       </div>
 
       <div className="vongo-flasks-intro">
