@@ -70,6 +70,7 @@ const handlemail = async (data) => {
     const msg = {
       to: email, // Recipient
       from: "info@vongo.co.za", // Your verified sender email
+      cc: "sales@vongo.co.za",
       subject: "Vongo Receipt",
       html: html, // Email body in HTML
     };

@@ -293,18 +293,20 @@ app.post('/api/addUser', async (req, res) => {
 
 
 app.get('/return_url', (req, res) => {
-  // You can capture payment status from the query parameters
-  const paymentStatus = req.query; // Capture any query parameters PayFast sends
-
-  // You can log this for debugging
+  const paymentStatus = req.query; // e.g., { payment_status: 'COMPLETE', m_payment_id: '123' }
   console.log('Payment Status:', paymentStatus);
 
-  const path = require("path");
-  
-  
-    res.sendFile(path.resolve(__dirname, "vongo-client", "build", "index.html"));
- 
+  // Serve index.html (React will handle routing to ReturnPage)
+  const filePath = path.resolve(__dirname, 'vongo-client', 'build', 'index.html');
+  if (!require('fs').existsSync(filePath)) {
+    console.error('File not found:', filePath);
+    return res.status(500).send('Server error');
+  }
+
+  res.sendFile(filePath); // React app loads, query params are available via URL
 });
+
+
 app.get('/cancel_url', (req, res) => {
   // You can capture payment status from the query parameters
   const paymentStatus = req.query; // Capture any query parameters PayFast sends

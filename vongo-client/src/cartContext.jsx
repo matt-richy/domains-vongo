@@ -4,22 +4,65 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Initialize the cart state from local storage
+    // Initialize cart from local storage
     const savedCartItems = localStorage.getItem("cartItems");
-    return savedCartItems ? JSON.parse(savedCartItems) : [];
+    const cartTimestamp = localStorage.getItem("cartTimestamp");
+    const sixHoursInMs = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+
+    // Check if cart exists and if 6 hours have passed
+    if (savedCartItems && cartTimestamp) {
+      const timeElapsed = Date.now() - parseInt(cartTimestamp, 10);
+      if (timeElapsed >= sixHoursInMs) {
+        // Clear expired cart
+        localStorage.removeItem("cartItems");
+        localStorage.removeItem("cartTimestamp");
+        return [];
+      }
+      return JSON.parse(savedCartItems);
+    }
+    return [];
   });
 
-  // Use useEffect to update local storage whenever cartItems changes
+  // Update local storage with cart items and timestamp
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    if (cartItems.length > 0) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      localStorage.setItem("cartTimestamp", Date.now().toString()); // Store current timestamp
+    } else {
+      // Clear storage if cart is empty
+      localStorage.removeItem("cartItems");
+      localStorage.removeItem("cartTimestamp");
+    }
   }, [cartItems]);
 
+  // Optional: Check expiration periodically (e.g., every minute)
+  useEffect(() => {
+    const checkExpiration = () => {
+      const cartTimestamp = localStorage.getItem("cartTimestamp");
+      const sixHoursInMs = 6 * 60 * 60 * 1000;
+
+      if (cartTimestamp) {
+        const timeElapsed = Date.now() - parseInt(cartTimestamp, 10);
+        if (timeElapsed >= sixHoursInMs) {
+          setCartItems([]);
+          localStorage.removeItem("cartItems");
+          localStorage.removeItem("cartTimestamp");
+        }
+      }
+    };
+
+    // Check on mount and every minute
+    checkExpiration();
+    const interval = setInterval(checkExpiration, 60 * 1000); // Every minute
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   const calculateTotalEngravingCost = (cartItems) => {
-    const engravingCostPerItem = 100; // Cost per engraving
+    const engravingCostPerItem = 100;
     return cartItems.reduce((total, item) => {
       if (item.engraving && Array.isArray(item.engraving)) {
         const validEngravings = item.engraving.filter(
-          (engravingText) => engravingText.trim() !== "" // Count only non-empty engravings
+          (engravingText) => engravingText.trim() !== ""
         ).length;
         return total + validEngravings * engravingCostPerItem;
       }
@@ -27,16 +70,13 @@ const CartProvider = ({ children }) => {
     }, 0);
   };
 
-  // Function to calculate total price, including engraving costs
-  const totPrice = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  ) + calculateTotalEngravingCost(cartItems);
+  const totPrice =
+    cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
+    calculateTotalEngravingCost(cartItems);
 
   const addToCart = (item) => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = [...prevCartItems, item];
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems)); // Update local storage immediately
       return updatedCartItems;
     });
   };
@@ -45,7 +85,6 @@ const CartProvider = ({ children }) => {
     setCartItems((prevCartItems) => {
       const newCartItems = [...prevCartItems];
       newCartItems.splice(index, 1);
-      localStorage.setItem("cartItems", JSON.stringify(newCartItems)); // Update local storage immediately
       return newCartItems;
     });
   };
@@ -54,30 +93,25 @@ const CartProvider = ({ children }) => {
     setCartItems((prevCartItems) =>
       prevCartItems.map((item) => {
         if (item.id === itemId) {
-          // Update the engraving array to match the new quantity
-          let updatedEngraving = [...item.engraving]; // Create a copy of the engraving array
+          let updatedEngraving = [...item.engraving];
           if (newQuantity > item.quantity) {
-            // Add empty engravings if quantity increased
             updatedEngraving = [
               ...updatedEngraving,
               ...new Array(newQuantity - item.quantity).fill(""),
             ];
           } else if (newQuantity < item.quantity) {
-            // Trim the engraving array if quantity decreased
             updatedEngraving = updatedEngraving.slice(0, newQuantity);
           }
-  
-          // Return the updated item
           return { ...item, quantity: newQuantity, engraving: updatedEngraving };
         }
-        return item; // Return unchanged item
+        return item;
       })
     );
   };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateCartQuantity, totPrice}}
+      value={{ cartItems, addToCart, removeFromCart, updateCartQuantity, totPrice }}
     >
       {children}
     </CartContext.Provider>
