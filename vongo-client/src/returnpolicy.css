@@ -1,11 +1,81 @@
+/* returnpolicy.css */
 .return-policy-container {
-   
-    font-family: "Helvetica Neue", Arial,sans-serif;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-  }
-  
+  max-width: 800px; /* Constrain width for readability */
+  margin: 40px auto; /* Center with top/bottom spacing */
+  padding: 20px;
+  font-family: Arial, sans-serif; /* Clean, modern font */
+  line-height: 1.6; /* Better readability */
+  color: #333; /* Dark gray for text */
+}
 
+/* Main heading */
+.policy-heading {
+  font-size: 2.5rem; /* Large heading */
+  font-weight: bold;
+  color: #2c3e50; /* Darker shade for emphasis */
+  margin-bottom: 20px;
+  text-align: center; /* Centered for prominence */
+}
+
+/* Subheadings */
+.policy-subheading {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #34495e; /* Slightly lighter than main heading */
+  margin-top: 30px;
+  margin-bottom: 15px;
+}
+
+/* Introductory paragraph */
+.policy-intro {
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  color: #555; /* Slightly lighter text */
+}
+
+/* Regular paragraphs */
+.policy-text {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+/* Unordered list */
+.policy-list {
+  list-style-type: disc; /* Default bullet points */
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.policy-list li {
+  margin-bottom: 10px; /* Space between items */
+}
+
+/* Ordered list */
+.policy-steps {
+  list-style-type: decimal; /* Numbered steps */
+  padding-left: 20px;
+  margin-bottom: 20px;
+}
+
+.policy-steps li {
+  margin-bottom: 15px; /* More space for steps */
+  font-size: 1rem;
+}
+
+/* Links */
+.policy-link {
+  color: #2980b9; /* Blue for links */
+  text-decoration: none; /* No underline by default */
+  transition: color 0.3s ease; /* Smooth hover effect */
+}
+
+.policy-link:hover {
+  color: #3498db; /* Lighter blue on hover */
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Bold text (e.g., <strong>) */
+.return-policy-container strong {
+  font-weight: 700;
+  color: #2c3e50; /* Match heading color for emphasis */
+}
