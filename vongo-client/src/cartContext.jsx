@@ -4,58 +4,18 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    // Initialize cart from local storage
     const savedCartItems = localStorage.getItem("cartItems");
-    const cartTimestamp = localStorage.getItem("cartTimestamp");
-    const sixHoursInMs = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
-
-    // Check if cart exists and if 6 hours have passed
-    if (savedCartItems && cartTimestamp) {
-      const timeElapsed = Date.now() - parseInt(cartTimestamp, 10);
-      if (timeElapsed >= sixHoursInMs) {
-        // Clear expired cart
-        localStorage.removeItem("cartItems");
-        localStorage.removeItem("cartTimestamp");
-        return [];
-      }
-      return JSON.parse(savedCartItems);
-    }
-    return [];
+    return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
-  // Update local storage with cart items and timestamp
+  // Update local storage with cart items
   useEffect(() => {
     if (cartItems.length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      localStorage.setItem("cartTimestamp", Date.now().toString()); // Store current timestamp
     } else {
-      // Clear storage if cart is empty
       localStorage.removeItem("cartItems");
-      localStorage.removeItem("cartTimestamp");
     }
   }, [cartItems]);
-
-  // Optional: Check expiration periodically (e.g., every minute)
-  useEffect(() => {
-    const checkExpiration = () => {
-      const cartTimestamp = localStorage.getItem("cartTimestamp");
-      const sixHoursInMs = 6 * 60 * 60 * 1000;
-
-      if (cartTimestamp) {
-        const timeElapsed = Date.now() - parseInt(cartTimestamp, 10);
-        if (timeElapsed >= sixHoursInMs) {
-          setCartItems([]);
-          localStorage.removeItem("cartItems");
-          localStorage.removeItem("cartTimestamp");
-        }
-      }
-    };
-
-    // Check on mount and every minute
-    checkExpiration();
-    const interval = setInterval(checkExpiration, 60 * 1000); // Every minute
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, []);
 
   const calculateTotalEngravingCost = (cartItems) => {
     const engravingCostPerItem = 100;
@@ -109,9 +69,28 @@ const CartProvider = ({ children }) => {
     );
   };
 
+  // New function to assign orderNumber to cartItems
+  const assignOrderNumber = (orderNumber) => {
+    setCartItems((prevCartItems) => {
+      // Assign the same orderNumber to all items in the cart
+      const updatedCartItems = prevCartItems.map((item) => ({
+        ...item,
+        orderNumber: orderNumber, // Add orderNumber to each item
+      }));
+      return updatedCartItems;
+    });
+  };
+
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, updateCartQuantity, totPrice }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateCartQuantity,
+        totPrice,
+        assignOrderNumber, // Expose this function
+      }}
     >
       {children}
     </CartContext.Provider>

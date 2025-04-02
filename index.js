@@ -103,20 +103,12 @@ app.post('/api/payfast', async (req, res) => {
   const myPassphrase = process.env.PASSPHRASE;
   myData["signature"] = generateSignature(myData, myPassphrase);
 
-  let htmlForm = `<form id="payfast-form" action="https://www.payfast.co.za/eng/process" method="post">`;
-  for (let key in myData) {
-    if (myData.hasOwnProperty(key)) {
-      const value = myData[key];
-      if (value !== "") {
-        htmlForm += `<input name="${key}" type="hidden" value="${value.trim()}" />`;
-      }
-    }
-  }
-  htmlForm += '<input type="submit" class="pay-button" value="Pay Now" /></form>';
+  const queryString = Object.entries(myData)
+  .map(([key, value]) => `${key}=${encodeURIComponent(value.trim())}`)
+  .join('&');
+const payfastUrl = `https://www.payfast.co.za/eng/process?${queryString}`;
 
-
-  // Send the form back as the response
-  res.send(htmlForm);
+res.send(payfastUrl); // Return URL instead of HTML
 });
 
 

@@ -11,12 +11,13 @@ const ReturnPage = () => {
 
   // Extract query parameters from URL (PayFast return_url params)
   const queryParams = new URLSearchParams(location.search);
-  const payfastOrderNumber = queryParams.get('m_payment_id'); // PayFast's order number
-  console.log("from url:" , payfastOrderNumber);
+  const payfastOrderNumber = queryParams.get('m_payment_id');
+  console.log("From URL:", payfastOrderNumber);
 
-  // Fallback to localStorage if no query param (for testing or edge cases)
+  // Fallback to cartItems orderNumber or localStorage
   const storedOrderNumber = localStorage.getItem('orderNumber');
-  const orderNumber = payfastOrderNumber || storedOrderNumber || 'Unknown';
+  const orderNumber =
+    payfastOrderNumber || (cartItems[0]?.orderNumber) || storedOrderNumber || 'Unknown';
 
   const handleClick = () => {
     navigate('/');
@@ -32,31 +33,37 @@ const ReturnPage = () => {
         </p1>
       </div>
 
-      {cartItems.map((item, index) => (
-        <div className="cart-items-grid" key={index}>
-          <div className="items-in-cart">
-            <img className="image-in-cart" src={item.src} alt="Cart item" />
-          </div>
-          <div className="bottle-cart-info">
-            <div className="item-header">
-              <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
+      {cartItems.length > 0 ? (
+        cartItems.map((item, index) => (
+          <div className="cart-items-grid" key={index}>
+            <div className="items-in-cart">
+              <img className="image-in-cart" src={item.src} alt="Cart item" />
             </div>
-            <h3 className="cart-item-text">
-              COLOUR: {item.colour}
-              <br />
-              QTY: {item.quantity}
-            </h3>
+            <div className="bottle-cart-info">
+              <div className="item-header">
+                <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
+              </div>
+              <h3 className="cart-item-text">
+                COLOUR: {item.colour}
+                <br />
+                QTY: {item.quantity}
+                <br />
+                ORDER #: {item.orderNumber || 'Pending'}
+              </h3>
+            </div>
+            <div>
+              <h3 className="cart-engraving-header">Engraving</h3>
+              {item.engraving.map((text, idx) => (
+                <li key={idx} className="engraving-item-cart">
+                  Bottle {idx + 1}: {text || 'None'}
+                </li>
+              ))}
+            </div>
           </div>
-          <div>
-            <h3 className="cart-engraving-header">Engraving</h3>
-            {item.engraving.map((text, index) => (
-              <li key={index} className="engraving-item-cart">
-                Bottle {index + 1}: {text || 'None'}
-              </li>
-            ))}
-          </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p>No items found in cart.</p>
+      )}
 
       <BottleInstructions />
 
