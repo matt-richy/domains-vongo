@@ -6,7 +6,7 @@ sgMail.setApiKey(process.env.SEND_GRID);
 const handlemail = async (data) => {
   try {
     // Destructure the incoming data
-    const { email, name, address, cart } = data;
+    const { email, name, address, cart, orderNumber } = data;
 
     if (!cart || cart.length === 0) {
       throw new Error("Cart is empty or invalid."); // Fails gracefully if cart data is missing
@@ -14,6 +14,8 @@ const handlemail = async (data) => {
 
     const cartItem = cart[0]; // Assuming the first item for simplicity
     const { capacity, price, colour, quantity } = cartItem;
+    
+
 
     // Map image URLs based on color
     const imageUrls = {
@@ -27,7 +29,7 @@ const handlemail = async (data) => {
     const image = imageUrls[colour] || imageUrls["blue"];
 
     // Log the extracted data for debugging
-    console.log({ email, capacity, colour, quantity, price, image });
+    console.log({ email, capacity, colour, quantity, price, image, orderNumber });
 
 
      // Map through the cart to create rows for each item
@@ -42,6 +44,7 @@ const handlemail = async (data) => {
              <p><strong>Color:</strong> ${item.colour}</p>
              <p><strong>Quantity:</strong> ${item.quantity}</p>
              <p><strong>Price:</strong> R${item.price}</p>
+             <p><strong>Order Number:</strong> ${item.orderNumber}</p>
            </div>
          </div>
        `;
