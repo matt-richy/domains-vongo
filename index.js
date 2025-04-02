@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require('path'); // Import path module
+const fs = require('fs'); // Import fs module (optional, for clarity)
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const dns = require('dns');
@@ -293,17 +295,17 @@ app.post('/api/addUser', async (req, res) => {
 
 
 app.get('/return_url', (req, res) => {
-  const paymentStatus = req.query; // e.g., { payment_status: 'COMPLETE', m_payment_id: '123' }
+  const paymentStatus = req.query;
   console.log('Payment Status:', paymentStatus);
 
-  // Serve index.html (React will handle routing to ReturnPage)
   const filePath = path.resolve(__dirname, 'vongo-client', 'build', 'index.html');
-  if (!require('fs').existsSync(filePath)) {
+  console.log('Resolved filePath:', filePath); // Add this
+  if (!fs.existsSync(filePath)) {
     console.error('File not found:', filePath);
-    return res.status(500).send('Server error');
+    return res.status(500).json({ error: 'Internal server error: HTML file not found' });
   }
 
-  res.sendFile(filePath); // React app loads, query params are available via URL
+  res.sendFile(filePath);
 });
 
 

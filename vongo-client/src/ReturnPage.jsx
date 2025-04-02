@@ -12,6 +12,7 @@ const ReturnPage = () => {
   // Extract query parameters from URL (PayFast return_url params)
   const queryParams = new URLSearchParams(location.search);
   const payfastOrderNumber = queryParams.get('m_payment_id'); // PayFast's order number
+  console.log("from url:" , payfastOrderNumber);
 
   // Fallback to localStorage if no query param (for testing or edge cases)
   const storedOrderNumber = localStorage.getItem('orderNumber');

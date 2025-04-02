@@ -49,8 +49,8 @@ const Popup = ({ onClosePopup, ...props }) => {
             </li>
           )}
         </ul>
-        <Link to="/Cart">
-          <img className="cart-icon" src={bag} />
+        <Link className="ahrefclass" to="/Cart">
+          <img className="cart-iconic" src={bag} />
         </Link>
       </div>
     </div>

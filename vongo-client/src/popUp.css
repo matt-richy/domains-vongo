@@ -70,14 +70,18 @@ body {
   margin-bottom: 0; /* Adjust the margin to increase or decrease the gap */
 }
 
-.cart-icon {
+.cart-iconic {
   width: 2.5rem;
   height: 2.5rem;
-  
+  margin: 0;
+}
+
+.ahrefclass {
+  margin: 0;
 }
 
 @media screen and (min-width: 480px) {
-  .cart-icon {
-    margin-left:64px;
-  }  
+  .cart-iconic {
+    margin: 0;
+  } 
 }

@@ -30,7 +30,7 @@ const Sidebar = ({ onCloseSideBar }) => {
       <ul className="sidebars">
         <li><Link to="/" onClick={handleLinkClick}>Home</Link></li>
         <li><Link to="/Purchase" onClick={handleLinkClick}>Buy</Link></li>
-        <li><Link to="/Cart" onClick={handleLinkClick}><img className="cart-icon" src={bag} alt="Cart" /></Link></li>
+        <li><Link to="/Cart" onClick={handleLinkClick}><img className="cart-icon2" src={bag} alt="Cart" /></Link></li>
         <li><Link to="/returnPolicy" onClick={handleLinkClick}>Returns</Link></li>
       </ul>
     </motion.div>
