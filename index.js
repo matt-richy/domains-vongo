@@ -19,6 +19,7 @@ const { findOne } = require("./models/usercart");
 const bodyParser = require('body-parser');
 const FullCart = require("./models/usercart")
 require('dotenv').config();
+const Counter = require("./models/counter");
 
 
 
@@ -58,24 +59,34 @@ app.post("/api/sendemail/receipt", handlemail);
 
 const Ordernum = mongoose.model("orderNum");
 
-app.post('/api/getOrderNum', async (req, res) => {
-
-  const {formData, price } = req.body;
+app.post("/api/getOrderNum", async (req, res) => {
+  const { formData, price } = req.body;
 
   try {
-    // Find the last order and increment the order number
-    const lastOrder = await Ordernum.findOne().sort({ orderNumber: -1 });
-    const newOrderNumber = lastOrder ? (parseInt(lastOrder.orderNumber) + 1).toString() : "1000"; // Increment or start from 1000
+    // Atomically increment the order number using Counter
+    const counter = await Counter.findOneAndUpdate(
+      { _id: "orderCounter" }, // Ensure the counter ID matches what you created in MongoDB
+      { $inc: { sequence_value: 1 } }, // Safely increment the counter
+      { new: true, upsert: true } // Create if not exists
+    );
 
-    // Save the new order number to the database
-    const newOrder = new Ordernum({ orderNumber: newOrderNumber, name_first: formData.name, name_last: formData.surname, email_address: formData.email, amount: price });
+    const newOrderNumber = counter.sequence_value.toString(); // Convert number to string
+
+    // Save the new order
+    const newOrder = new Ordernum({
+      orderNumber: newOrderNumber, // Ensure it's stored as a string
+      name_first: formData.name,
+      name_last: formData.surname,
+      email_address: formData.email,
+      amount: price
+    });
+
     await newOrder.save();
-
-    // Send the new order number back to the client
     res.status(200).json({ orderNumber: newOrderNumber });
+
   } catch (error) {
-    console.error('Error generating order number:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error generating order number:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

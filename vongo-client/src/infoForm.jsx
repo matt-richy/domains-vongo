@@ -56,7 +56,15 @@ const ContactForm = () => {
     let orderNumber;
     try {
       orderNumber = await getOrderNum(formData, totPrice);
-      assignOrderNumber(orderNumber); // Store in cartItems
+      // Assign order number and ensure it’s saved synchronously
+      assignOrderNumber(orderNumber);
+      // Force immediate localStorage update (bypass React async)
+      localStorage.setItem("orderNumber", orderNumber);
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      console.log("Pre-redirect localStorage:", {
+        orderNumber: localStorage.getItem("orderNumber"),
+        cartItems: localStorage.getItem("cartItems"),
+      });
     } catch (error) {
       setError("Failed to generate order number. Please try again.");
       setLoading(false);
@@ -91,8 +99,10 @@ const ContactForm = () => {
         responseType: "text", // Expect HTML or URL
       });
 
-      // Assuming /api/payfast returns a URL instead of HTML
-      window.location.href = response.data; // Redirect to PayFast
+      // Redirect to PayFast with a slight delay to ensure persistence
+      setTimeout(() => {
+        window.location.href = response.data;
+      }, 100); // Small delay to allow localStorage to settle
     } catch (error) {
       console.error("Error initiating payment:", error);
       setError("Failed to initiate payment. Please try again.");

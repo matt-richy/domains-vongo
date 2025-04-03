@@ -8,20 +8,35 @@ const CartProvider = ({ children }) => {
     return savedCartItems ? JSON.parse(savedCartItems) : [];
   });
 
-  // Update local storage with cart items
+  const [orderNumber, setOrderNumber] = useState(() => {
+    return localStorage.getItem("orderNumber") || "";
+  });
+
+  // Sync cartItems to localStorage
   useEffect(() => {
     if (cartItems.length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      console.log("CartItems saved to local storage:", cartItems); // Debug log
+      console.log("CartItems saved to local storage:", cartItems);
     } else {
       localStorage.removeItem("cartItems");
       console.log("CartItems cleared from local storage");
     }
   }, [cartItems]);
 
-  const calculateTotalEngravingCost = (cartItems) => {
+  // Sync orderNumber to localStorage
+  useEffect(() => {
+    if (orderNumber) {
+      localStorage.setItem("orderNumber", orderNumber);
+      console.log("OrderNumber saved to local storage:", orderNumber);
+    } else {
+      localStorage.removeItem("orderNumber");
+      console.log("OrderNumber cleared from local storage");
+    }
+  }, [orderNumber]);
+
+  const calculateTotalEngravingCost = (items) => {
     const engravingCostPerItem = 100;
-    return cartItems.reduce((total, item) => {
+    return items.reduce((total, item) => {
       if (item.engraving && Array.isArray(item.engraving)) {
         const validEngravings = item.engraving.filter(
           (engravingText) => engravingText.trim() !== ""
@@ -37,10 +52,7 @@ const CartProvider = ({ children }) => {
     calculateTotalEngravingCost(cartItems);
 
   const addToCart = (item) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = [...prevCartItems, item];
-      return updatedCartItems;
-    });
+    setCartItems((prevCartItems) => [...prevCartItems, item]);
   };
 
   const removeFromCart = (index) => {
@@ -71,19 +83,13 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  // Function to assign orderNumber to cartItems
-  const assignOrderNumber = (orderNumber) => {
-    setCartItems((prevCartItems) => {
-      const updatedCartItems = prevCartItems.map((item) => ({
-        ...item,
-        orderNumber: orderNumber,
-      }));
-      console.log("Assigned orderNumber:", orderNumber);
-      // Force synchronous update to local storage
-      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
-      console.log("CartItems with orderNumber saved:", updatedCartItems);
-      return updatedCartItems;
-    });
+  // Assign order number and ensure it’s saved before proceeding
+  const assignOrderNumber = (newOrderNumber) => {
+    setOrderNumber(newOrderNumber);
+    // Optionally, you can still attach it to cart items if needed
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((item) => ({ ...item, orderNumber: newOrderNumber }))
+    );
   };
 
   return (
@@ -94,6 +100,7 @@ const CartProvider = ({ children }) => {
         removeFromCart,
         updateCartQuantity,
         totPrice,
+        orderNumber,
         assignOrderNumber,
       }}
     >

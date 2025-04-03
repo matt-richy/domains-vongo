@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 // Define an Order schema
 const orderSchema = new Schema({
   orderNumber: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
