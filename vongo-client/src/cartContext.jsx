@@ -12,25 +12,23 @@ const CartProvider = ({ children }) => {
     return localStorage.getItem("orderNumber") || "";
   });
 
-  // Sync cartItems to localStorage
+  // Sync cartItems to localStorage, but don’t clear unless explicitly requested
   useEffect(() => {
     if (cartItems.length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       console.log("CartItems saved to local storage:", cartItems);
-    } else {
-      localStorage.removeItem("cartItems");
-      console.log("CartItems cleared from local storage");
+    } else if (cartItems.length === 0 && localStorage.getItem("cartItems")) {
+      console.log("CartItems are empty but not clearing localStorage yet");
     }
   }, [cartItems]);
 
-  // Sync orderNumber to localStorage
+  // Sync orderNumber to localStorage, but don’t clear unless explicitly requested
   useEffect(() => {
     if (orderNumber) {
       localStorage.setItem("orderNumber", orderNumber);
       console.log("OrderNumber saved to local storage:", orderNumber);
-    } else {
-      localStorage.removeItem("orderNumber");
-      console.log("OrderNumber cleared from local storage");
+    } else if (!orderNumber && localStorage.getItem("orderNumber")) {
+      console.log("OrderNumber is empty but not clearing localStorage yet");
     }
   }, [orderNumber]);
 
@@ -83,13 +81,20 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  // Assign order number and ensure it’s saved before proceeding
   const assignOrderNumber = (newOrderNumber) => {
     setOrderNumber(newOrderNumber);
-    // Optionally, you can still attach it to cart items if needed
     setCartItems((prevCartItems) =>
       prevCartItems.map((item) => ({ ...item, orderNumber: newOrderNumber }))
     );
+  };
+
+  // Explicit clear function
+  const clearCart = () => {
+    setCartItems([]);
+    setOrderNumber("");
+    localStorage.removeItem("cartItems");
+    localStorage.removeItem("orderNumber");
+    console.log("Cart and orderNumber explicitly cleared");
   };
 
   return (
@@ -102,6 +107,7 @@ const CartProvider = ({ children }) => {
         totPrice,
         orderNumber,
         assignOrderNumber,
+        clearCart,
       }}
     >
       {children}
