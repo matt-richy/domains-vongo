@@ -12,8 +12,10 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     if (cartItems.length > 0) {
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      console.log("CartItems saved to local storage:", cartItems); // Debug log
     } else {
       localStorage.removeItem("cartItems");
+      console.log("CartItems cleared from local storage");
     }
   }, [cartItems]);
 
@@ -69,14 +71,17 @@ const CartProvider = ({ children }) => {
     );
   };
 
-  // New function to assign orderNumber to cartItems
+  // Function to assign orderNumber to cartItems
   const assignOrderNumber = (orderNumber) => {
     setCartItems((prevCartItems) => {
-      // Assign the same orderNumber to all items in the cart
       const updatedCartItems = prevCartItems.map((item) => ({
         ...item,
-        orderNumber: orderNumber, // Add orderNumber to each item
+        orderNumber: orderNumber,
       }));
+      console.log("Assigned orderNumber:", orderNumber);
+      // Force synchronous update to local storage
+      localStorage.setItem("cartItems", JSON.stringify(updatedCartItems));
+      console.log("CartItems with orderNumber saved:", updatedCartItems);
       return updatedCartItems;
     });
   };
@@ -89,7 +94,7 @@ const CartProvider = ({ children }) => {
         removeFromCart,
         updateCartQuantity,
         totPrice,
-        assignOrderNumber, // Expose this function
+        assignOrderNumber,
       }}
     >
       {children}

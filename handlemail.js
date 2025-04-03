@@ -44,7 +44,7 @@ const handlemail = async (data) => {
              <p><strong>Color:</strong> ${item.colour}</p>
              <p><strong>Quantity:</strong> ${item.quantity}</p>
              <p><strong>Price:</strong> R${item.price}</p>
-             <p><strong>Order Number:</strong> ${item.orderNumber}</p>
+            
            </div>
          </div>
        `;
@@ -55,7 +55,7 @@ const handlemail = async (data) => {
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 1rem; border: 1px solid #ddd; border-radius: 8px;">
         <h1 style="text-align: center; color: #333;">VONGO</h1>
-        <p>Hi ${name},</p>
+        <p>Hi ${name}, your order number is ${orderNumber}</p>
         <p>Thank you for shopping at VONGO! Your support means the world to us. Here's a summary of your order:</p>
         <div style="display:flex; flex-direction: column; align-items:center"> 
         <h2 style="margin-top: 2rem; color: #333;">Order Summary</h2>
