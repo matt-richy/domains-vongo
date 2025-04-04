@@ -5,6 +5,7 @@ import { useCart } from "./cartContext";
 import BottleInstructions from "./bottleInstructions";
 import axios from "axios";
 
+
 const ReturnPage = () => {
   const { cartItems, orderNumber, assignOrderNumber, clearCart } = useCart();
   const navigate = useNavigate();
@@ -86,9 +87,7 @@ const ReturnPage = () => {
       {displayCartItems.length > 0 ? (
         displayCartItems.map((item, index) => (
           <div className="cart-items-grid" key={index}>
-            <div className="items-in-cart">
-              <img className="image-in-cart" src={item.src} alt="Cart item" />
-            </div>
+            
             <div className="bottle-cart-info">
               <div className="item-header">
                 <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
