@@ -95,14 +95,10 @@ const ContactForm = () => {
         cell_number: paymentNumber(formData.number),
         order_number: orderNumber,
       };
-      const response = await axios.post("/api/payfast", paymentData, {
-        responseType: "text", // Expect HTML or URL
-      });
-
-      // Redirect to PayFast with a slight delay to ensure persistence
-      setTimeout(() => {
-        window.location.href = response.data;
-      }, 100); // Small delay to allow localStorage to settle
+      const response = await axios.post("/api/payfast", paymentData, { responseType: "text" });
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure localStorage persists
+      console.log("Redirecting to:", response.data);
+      window.location.href = response.data;
     } catch (error) {
       console.error("Error initiating payment:", error);
       setError("Failed to initiate payment. Please try again.");

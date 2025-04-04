@@ -98,7 +98,7 @@ app.post('/api/payfast', async (req, res) => {
 
     myData["merchant_id"]=  process.env.MERCHANT_ID ;
     myData["merchant_key"]= process.env.MERCHANT_KEY;
-    myData["return_url"] = process.env.RETURN_URL;
+    myData["return_url"] = myData["return_url"] = `${process.env.RETURN_URL}?orderNumber=${encodeURIComponent(paymentData.order_number)}`;
     myData["cancel_url"] = process.env.CANCEL_URL;
     myData["notify_url"] = process.env.NOTIFY_URL;
 
@@ -242,6 +242,30 @@ app.post('/payfast-notify', async (req, res) => {
   }
 });
 
+
+
+// In your backend (e.g., app.js or routes file)
+app.get("/api/order/:orderNumber", async (req, res) => {
+  try {
+    const orderNumber = req.params.orderNumber;
+    const order = await FullCart.findOne({ orderNumber }); // Fetch from MongoDB
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    console.log("Fetched order:", order)
+    console.log("Paymentsuccesful:", order.paymentSuccessful)
+    
+    res.json({
+      cart: order.cart,
+      orderNumber: order.orderNumber,
+      paymentStatus: order.paymentSuccessful,
+    });
+  } catch (error) {
+    console.error("Error fetching order:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
 
 
 
