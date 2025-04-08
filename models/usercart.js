@@ -38,6 +38,11 @@ const userSchema = new Schema({
     type: String, 
     required: true
   }, 
+  totPrice : {
+    type: String, 
+    required: true
+  },
+
   paymentSuccessful: {
     type: Boolean, 
     required: false, 

@@ -72,7 +72,7 @@ const ContactForm = () => {
     }
 
     // Prepare full order for MongoDB
-    const fullOrder = { ...formData, cart: cartUser, orderNumber };
+    const fullOrder = { ...formData, cart: cartUser, orderNumber, totPrice };
 
     // Post to MongoDB
     try {

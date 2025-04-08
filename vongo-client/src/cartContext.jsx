@@ -47,7 +47,7 @@ const CartProvider = ({ children }) => {
 
   const totPrice =
     cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0) +
-    calculateTotalEngravingCost(cartItems);
+    calculateTotalEngravingCost(cartItems) + 100;
 
   const addToCart = (item) => {
     setCartItems((prevCartItems) => [...prevCartItems, item]);

@@ -12,6 +12,18 @@
     margin-bottom: 70px;
 }
 
+.bottle-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bottle-img {
+    max-width: 200px; /* Adjust size as needed */
+    height: auto;
+    margin: 10px;
+  }
+
 .general-details-text {
     font-size: 20px;
     font-family: "Helvetica Neue", Arial, sans-serif;
@@ -45,7 +57,8 @@
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 20px;
     line-height: 30px;
-    
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 
