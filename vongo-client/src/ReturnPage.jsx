@@ -64,7 +64,7 @@ const ReturnPage = () => {
           }
         } else {
           console.log("error over here", paymentStatus);
-          setError(`Payment status: ${paymentStatus}. Please contact support.`);
+          setError(`Payment status: ${paymentStatus}. Please contact support - your order number is ${fetchedOrderNumber}`);
         }
       } catch (err) {
         setError("Failed to load order details. Please try again or contact support.");
@@ -99,8 +99,61 @@ const ReturnPage = () => {
     return (
       <div className="main-div">
         <h1 className="payment-heading">Payment Processing</h1>
-        <p>{error}</p>
-        <button className="try-again-button" onClick={handleClick}>Home</button>
+        <p className="error-p">{error}</p>
+        <div className="main-div">
+     
+
+      {displayCartItems.length > 0 ? (
+        displayCartItems.map((item, index) => (
+          <div className="cart-items-grid" key={index}>
+            {/* Add the bottle image */}
+            <div className="bottle-image">
+              <img
+                src={bottleImages[item.colour.toLowerCase()] || black1} // Fallback to black1 if colour not found
+                alt={`${item.colour} bottle`}
+                className="bottle-img"
+              />
+            </div>
+            <div className="bottle-cart-info">
+              <div className="item-header">
+                <h1 className="item-header-head">Vongo Flask - {item.capacity}</h1>
+              </div>
+              <h3 className="cart-item-text">
+                COLOUR: {item.colour}
+                <br />
+                QTY: {item.quantity}
+                <br />
+                ORDER #: {item.orderNumber || displayOrderNumber}
+              </h3>
+            </div>
+            <div>
+              <h3 className="cart-engraving-header">Engraving</h3>
+              {item.engraving.map((text, idx) => (
+                <li key={idx} className="engraving-item-cart">
+                  Bottle {idx + 1}: {text || "None"}
+                </li>
+              ))}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p>No items found in cart.</p>
+      )}
+
+
+
+      <div className="button-div">
+        <button className="try-again-button" onClick={handleClick}>
+          Home
+        </button>
+      </div>
+    
+    </div>
+
+        <a className="support-email" href={`mailto:sales@vongo.co.za?subject=Order%20Support%20-%20${displayOrderNumber}`}>Something wrong? Click me to email Vongo!</a>
+  
+
+
       </div>
     );
   }

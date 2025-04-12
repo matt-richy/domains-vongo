@@ -59,31 +59,33 @@ app.post("/api/sendemail/receipt", handlemail);
 
 const Ordernum = mongoose.model("orderNum");
 
+function generateRandomCode(length = 7) {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+}
+
 app.post("/api/getOrderNum", async (req, res) => {
   const { formData, price } = req.body;
 
   try {
-    // Atomically increment the order number using Counter
-    const counter = await Counter.findOneAndUpdate(
-      { _id: "orderCounter" }, // Ensure the counter ID matches what you created in MongoDB
-      { $inc: { sequence_value: 1 } }, // Safely increment the counter
-      { new: true, upsert: true } // Create if not exists
-    );
-
-    const newOrderNumber = counter.sequence_value.toString(); // Convert number to string
+    // Generate a random alphanumeric order number
+    const newOrderNumber = generateRandomCode(); // e.g., "X7K9P2M"
 
     // Save the new order
     const newOrder = new Ordernum({
-      orderNumber: newOrderNumber, // Ensure it's stored as a string
+      orderNumber: newOrderNumber,
       name_first: formData.name,
       name_last: formData.surname,
       email_address: formData.email,
-      amount: price
+      amount: price,
     });
 
     await newOrder.save();
     res.status(200).json({ orderNumber: newOrderNumber });
-
   } catch (error) {
     console.error("Error generating order number:", error);
     res.status(500).json({ error: "Internal server error" });

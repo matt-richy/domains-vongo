@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./infoForm.css";
 import axios from "axios";
 import { useCart } from "./cartContext";
@@ -18,6 +18,26 @@ const ContactForm = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Reset loading state on mount and when page becomes visible
+  useEffect(() => {
+    // Reset loading when component mounts
+    setLoading(false);
+
+    // Listen for visibility change (e.g., user returns from Payfast)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        setLoading(false); // Reset loading when page is visible
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Cleanup event listener
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []); // Empty dependency array to run only on mount
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,9 +76,7 @@ const ContactForm = () => {
     let orderNumber;
     try {
       orderNumber = await getOrderNum(formData, totPrice);
-      // Assign order number and ensure it’s saved synchronously
       assignOrderNumber(orderNumber);
-      // Force immediate localStorage update (bypass React async)
       localStorage.setItem("orderNumber", orderNumber);
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
       console.log("Pre-redirect localStorage:", {
