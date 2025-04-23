@@ -12,6 +12,7 @@ import CancelPage from './CancelPage';
 import NotifyPage from './NotifyPage';
 import ScrollToTop from "./ScrollToTop";
 import ReturnPolicy from "./returnpolicy";
+import ReviewForm from "./reviews";
 
 
 
@@ -32,7 +33,7 @@ export default function App() {
         <Route path="cancel_url" element={< CancelPage />} />
         <Route path="notify_url" element={< NotifyPage />} />
         <Route path="returnPolicy" element ={< ReturnPolicy />} />
-        
+        <Route path="reviews" element = {<ReviewForm /> } />
         </Routes>
       </CartProvider>
     </Router>

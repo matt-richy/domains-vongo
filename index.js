@@ -20,6 +20,7 @@ const bodyParser = require('body-parser');
 const FullCart = require("./models/usercart")
 require('dotenv').config();
 const Counter = require("./models/counter");
+const Review = require("./models/reviews.js")
 
 
 
@@ -269,6 +270,38 @@ app.get("/api/order/:orderNumber", async (req, res) => {
   }
 });
 
+
+
+
+const newReview = mongoose.model("Review")
+app.post("/api/reviews", async(req, res) => {
+  const data = req.body
+  const rating = data.rating;
+  const comment = data.comment;
+  const name = data.name;
+
+  new newReview ({
+    rating: rating,
+    comment: comment, 
+    name: name,
+  }).save()
+  
+  console.log("added review");
+  return res.status(200).json({success: "completed successfully "});
+  
+});
+
+
+app.get("/api/getreviews", async (req, res) => {
+  try {
+    const reviews = await Review.find().sort({ createdAt: -1 }).limit(20); // Sort by newest first
+    console.log(reviews);
+    res.status(200).json(reviews);
+  } catch (error) {
+    console.log("error getting reviews")
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 
 
