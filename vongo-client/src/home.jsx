@@ -19,6 +19,7 @@ import media1mobile from "./photos/bottles/media1mobile.jpg";
 import media2mobile from "./photos/bottles/media2mobile.jpg";
 import CampingSection from "./useCase";
 import HeroSection from "./herosection";
+import Banner from "./discountbanner";
 
 const Homepage = () => {
 
@@ -68,6 +69,10 @@ const Homepage = () => {
         <link rel="preload" href={media1mobile} as="image" />
         <link rel="preload" href={media2mobile} as="image" />
       </Helmet>
+
+
+      <Banner />
+      
       <div className="first-thing-div">
         <div className="main-heading-div">
           <div className="top-text-div">

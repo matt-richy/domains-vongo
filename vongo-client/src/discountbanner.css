@@ -1,0 +1,92 @@
+.banner {
+    
+    top: 100px;
+    left: 0;
+    width: 100%;
+    background-color: #08405c;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+.banner:hover {
+    background-color: #08405c;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 1001;
+    max-width: 400px;
+    width: 90%;
+    font-family: Arial, sans-serif;
+}
+
+.popup-content {
+    text-align: center;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.popup-content p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.popup-content input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.popup-content button {
+    background-color: #08405c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.popup-content button:hover {
+    background-color: #08405c;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+}

@@ -21,6 +21,8 @@ const FullCart = require("./models/usercart")
 require('dotenv').config();
 const Counter = require("./models/counter");
 const Review = require("./models/reviews.js")
+const PromoCode = require('./models/promoCode.js');
+const { sendEmail } = require('./promoemail.js');
 
 
 
@@ -120,6 +122,10 @@ app.post('/api/payfast', async (req, res) => {
   const queryString = Object.entries(myData)
   .map(([key, value]) => `${key}=${encodeURIComponent(value.trim())}`)
   .join('&');
+
+  //https://sandbox.payfast.co.za/eng/process
+  //https://www.payfast.co.za/eng/process
+
 const payfastUrl = `https://www.payfast.co.za/eng/process?${queryString}`;
 
 res.send(payfastUrl); // Return URL instead of HTML
@@ -146,11 +152,16 @@ const pfValidIP = async (req) => {
   ];
   const pfIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
+  console.log("Validating IP. Incoming IP:", pfIp);
+
   try {
     const ipPromises = validHosts.map(ipLookup); // Parallelize DNS lookups
     const allIps = (await Promise.all(ipPromises)).flat();
     const uniqueIps = [...new Set(allIps)];
-    return uniqueIps.includes(pfIp);
+    console.log("Valid PayFast IPs:", uniqueIps);
+    const isValid = uniqueIps.includes(pfIp);
+    console.log("IP Validation Result:", isValid);
+    return isValid;
   } catch (err) {
     console.error("IP validation failed:", err);
     return false;
@@ -162,17 +173,25 @@ const pfValidSignature = (pfData, pfParamString, passPhrase) => {
     pfParamString += `&passphrase=${encodeURIComponent(passPhrase.trim()).replace(/%20/g, "+")}`;
   }
   const signature = crypto.createHash('md5').update(pfParamString).digest('hex');
-  return pfData['signature'] === signature;
+  const isValid = pfData['signature'] === signature;
+  console.log("Signature Validation Result:", isValid);
+  return isValid;
 };
 
 const pfValidPaymentData = (cartTotal, pfData) => {
-  return Math.abs(parseFloat(cartTotal) - parseFloat(pfData['amount_gross'])) <= 0.01;
+  const difference = Math.abs(parseFloat(cartTotal) - parseFloat(pfData['amount_gross']));
+  const isValid = difference <= 0.01;
+  console.log("Payment Data Validation Result:", isValid, "Difference:", difference);
+  return isValid;
 };
 
 const pfValidServerConfirmation = async (pfHost, pfParamString) => {
+  console.log("Validating server confirmation with host:", pfHost);
   try {
     const response = await axios.post(`https://${pfHost}/eng/query/validate`, pfParamString);
-    return response.data === 'VALID';
+    const isValid = response.data === 'VALID';
+    console.log("Server Confirmation Result:", isValid, "Response Data:", response.data);
+    return isValid;
   } catch (error) {
     console.error("Server confirmation failed:", error.message);
     return false;
@@ -187,7 +206,6 @@ app.post('/payfast-notify', async (req, res) => {
 
   console.log("Incoming PayFast Data:", pfData);
 
-  // Step 1: Create pfParamString
   let pfParamString = "";
   for (let key in pfData) {
     if (key !== "signature") {
@@ -196,26 +214,32 @@ app.post('/payfast-notify', async (req, res) => {
   }
   pfParamString = pfParamString.slice(0, -1); // Remove last '&'
 
-  try {
-    const pforderNumber = Number(pfData['m_payment_id']);
-    const cartTotal = await Order.findOne({ orderNumber: pforderNumber }).then(order => order?.amount);
+ try {
+  const pforderNumber = pfData['m_payment_id']; // Keep this as a string
+  console.log("Order Number (from PayFast):", pforderNumber);
 
-    if (!cartTotal) {
-      return res.status(400).json({ error: "Order not found" });
-    }
+  const order = await Order.findOne({ orderNumber: pforderNumber });
+  if (!order) {
+    console.warn("Order not found for order number:", pforderNumber);
+    return res.status(400).json({ error: "Order not found" });
+  }
+  const cartTotal = order.amount; // Assuming `totPrice` is the total price field in your DB
+  console.log("Cart Total for Order:", cartTotal);
 
-    const passPhrase = process.env.PASSPHRASE;
+  const passPhrase = process.env.PASSPHRASE;
+  console.log("Performing validation checks...");
+  
+  const checks = await Promise.all([
+    pfValidSignature(pfData, pfParamString, passPhrase),
+    pfValidIP(req),
+    pfValidPaymentData(cartTotal, pfData),
+    pfValidServerConfirmation(pfHost, pfParamString),
+  ]);
 
-    // Step 2: Perform validations
-    const checks = await Promise.all([
-      pfValidSignature(pfData, pfParamString, passPhrase),
-      pfValidIP(req),
-      pfValidPaymentData(cartTotal, pfData),
-      pfValidServerConfirmation(pfHost, pfParamString)
-    ]);
+  console.log("Validation Results:", checks);
 
     if (checks.every(Boolean)) {
-      // Step 3: Update order and send email
+      console.log("All validation checks passed. Proceeding to update order.");
       const updatedDocument = await FullCart.findOneAndUpdate(
         { orderNumber: pforderNumber },
         { $set: { paymentSuccessful: true } },
@@ -223,13 +247,47 @@ app.post('/payfast-notify', async (req, res) => {
       );
 
       if (!updatedDocument) {
+        console.warn("Document not found for order number:", pforderNumber);
         return res.status(404).json({ message: "Document not found" });
       }
 
       console.log("Document updated successfully:", updatedDocument);
 
+     if (updatedDocument.appliedPromoCode) {
+  const appliedPromoCode = updatedDocument.appliedPromoCode.trim(); // Remove any leading/trailing spaces
+  console.log(`Attempting to mark promo code as used: ${appliedPromoCode}`);
+  
+  try {
+    // Debugging: Check for promo code existence
+    const existingPromo = await PromoCode.findOne({ genpromoCode: appliedPromoCode });
+    if (!existingPromo) {
+      console.warn(`Promo code ${appliedPromoCode} not found in the database.`);
+    } else {
+      console.log(`Promo code found:`, existingPromo);
+
+      // Update promo code as used
+      const updatedPromo = await PromoCode.findOneAndUpdate(
+        { genpromoCode: appliedPromoCode },
+        { $set: { used: true } },
+        { new: true }
+      );
+
+      if (updatedPromo) {
+        console.log(`Promo code ${appliedPromoCode} successfully marked as used for email ${updatedDocument.email}`);
+      } else {
+        console.warn(`Failed to update promo code: ${appliedPromoCode}`);
+      }
+    }
+  } catch (promoError) {
+    console.error(`Error updating promo code (${appliedPromoCode}):`, promoError.message);
+  }
+} else {
+  console.log("No promo code applied to this order.");
+}
+
       try {
         await handlemail(updatedDocument);
+        console.log("Email sent successfully to:", updatedDocument.email);
         return res.status(200).json({ message: "Payment successful and email sent!" });
       } catch (emailError) {
         console.error("Error sending email:", emailError.message);
@@ -244,7 +302,6 @@ app.post('/payfast-notify', async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 
 // In your backend (e.g., app.js or routes file)
@@ -303,6 +360,88 @@ app.get("/api/getreviews", async (req, res) => {
   }
 });
 
+
+
+const generatePromoCode = () => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let promoCode = '';
+  for (let i = 0; i < 6; i++) {
+      promoCode += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return promoCode || null;
+};
+
+app.post("/api/getdiscountcode", async (req, res) => {
+  const { email } = req.body;
+
+  // Validate the email
+  if (!email || typeof email !== 'string' || !email.includes('@')) {
+      return res.status(400).json({ message: 'Invalid email address.' });
+  }
+
+  try {
+      // Check if email already has a promo code
+      const existingPromo = await PromoCode.findOne({ email });
+      if (existingPromo) {
+          return res.status(400).json({
+              message: 'This email has already been used to generate a promo code.',
+              existingPromoCode: existingPromo.genpromoCode,
+          });
+      }
+
+      // Generate a unique promo code
+      let genpromoCode;
+      let isDuplicate;
+      do {
+          genpromoCode = generatePromoCode();
+          if (!genpromoCode) {
+              throw new Error('Failed to generate a valid promo code.');
+          }
+          isDuplicate = await PromoCode.findOne({ genpromoCode });
+      } while (isDuplicate);
+
+      // Save the new promo code in the database
+      const newPromo = new PromoCode({ email, genpromoCode });
+      await newPromo.save();
+
+      // Optionally send the promo code via email
+      await sendEmail(email, genpromoCode);
+
+      res.json({ message: 'Promo code saved.', promoCode: genpromoCode });
+  } catch (err) {
+      console.error("Failed to save promo code:", err);
+      res.status(500).json({ message: 'Failed to save promo code.', error: err.message });
+  }
+});
+
+app.post('/api/validatepromocode', async (req, res) => {
+  console.log('Received POST to /api/validatepromocode with body:', req.body);
+  const { promoCode } = req.body;
+
+  // Validate promo code format
+  if (!promoCode || !/^[A-Z0-9]{6}$/.test(promoCode)) {
+      return res.status(400).json({ message: 'Invalid promo code format.' });
+  }
+
+  try {
+      // Find promo code in the database
+      const existingPromo = await PromoCode.findOne({ genpromoCode: promoCode });
+      if (!existingPromo) {
+          return res.status(404).json({ message: 'Promo code not found.' });
+      }
+
+      // Check if promo code is already used
+      if (existingPromo.used) {
+          return res.status(400).json({ message: 'Promo code already used.' });
+      }
+
+      // Promo code is valid
+      res.json({ message: 'Valid promo code.', valid: true });
+  } catch (err) {
+      console.error('Error in /api/validatepromocode:', err);
+      res.status(500).json({ message: 'Failed to validate promo code.', error: err.message });
+  }
+});
 
 
 

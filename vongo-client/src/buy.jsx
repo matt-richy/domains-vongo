@@ -17,6 +17,7 @@ import blue1 from "./photos/bottles/blue1.png"
 import lblack1 from "./photos/bottles/lblack1.png"
 import lblue1 from "./photos/bottles/lblue1.png"
 import lgrey1 from "./photos/bottles/lgrey1.png"
+import Banner from "./discountbanner";
 
 
 
@@ -171,6 +172,9 @@ export default function Buy() {
 
 
   return (
+    <>  
+    <Banner />
+   
     <div>
       {bottles.map((items) => (
         <div className="grid-items" key={items.id}>
@@ -323,5 +327,6 @@ export default function Buy() {
       ))}
       <Footer />
     </div>
+    </>
   );
 }

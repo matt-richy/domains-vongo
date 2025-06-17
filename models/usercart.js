@@ -42,6 +42,11 @@ const userSchema = new Schema({
     type: String, 
     required: true
   },
+  appliedPromoCode: {
+    type: String,
+    match: /^[A-Z0-9]{6}$/,
+    default: null
+  },
 
   paymentSuccessful: {
     type: Boolean, 

@@ -5,7 +5,7 @@ import { useCart } from "./cartContext";
 import { useNavigate } from "react-router-dom";
 
 const ContactForm = () => {
-  const { cartItems, totPrice, assignOrderNumber } = useCart();
+  const { cartItems, totPrice, assignOrderNumber, appliedPromoCode } = useCart();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -90,7 +90,7 @@ const ContactForm = () => {
     }
 
     // Prepare full order for MongoDB
-    const fullOrder = { ...formData, cart: cartUser, orderNumber, totPrice };
+    const fullOrder = { ...formData, cart: cartUser, orderNumber, totPrice, appliedPromoCode };
 
     // Post to MongoDB
     try {
