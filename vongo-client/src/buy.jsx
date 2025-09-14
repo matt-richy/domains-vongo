@@ -36,7 +36,7 @@ const bottles = [
         blue: [blue1],
         white: [white1],
         grey: [grey1],
-        price: 699,
+        price: 799,
         capacity: "1.9 Liters",
       },
       large: {
